@@ -11,7 +11,7 @@
 | **Team Name** | Aethan |
 | **College / Institution** | Amity University Mumbai |
 | **Team Leader** | Anurag Roopchandra Kannojiya (`anuragkannaujiyak@gmail.com`) |
-| **Team Member 2** | _<Add Member 2 Name & Email>_ |
+| **Public GitHub Repository** | [https://github.com/AnuragKannojiya/Aethan_AmityUniversityMumbai](https://github.com/AnuragKannojiya/Aethan_AmityUniversityMumbai) |
 | **Submission Folder** | `Aethan_AmityUniversityMumbai` |
 
 ---
