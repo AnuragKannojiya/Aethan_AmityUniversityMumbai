@@ -1,10 +1,4 @@
-"""
-GlucoTwin Feature Engineering Package
-=====================================
-
-Static EHR risk profiling, multi-scale temporal CGM feature extraction,
-and central feature store management for Indian Type 2 Diabetes digital twins.
-"""
+"""GlucoTwin Feature Engineering Package"""
 
 from .static_features import (
     extract_static_features,

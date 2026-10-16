@@ -1,11 +1,4 @@
-"""
-GlucoTwin: Central Feature Store & Pipeline Registry
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Coordinates static EHR and dynamic CGM feature extraction, provides leakage-free
-train/val/test feature transformation, scikit-learn standard scaling, and persistence.
-"""
+"""GlucoTwin: Central Feature Store & Pipeline Registry"""
 
 from __future__ import annotations
 
@@ -46,17 +39,7 @@ DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 class FeatureStore:
-    """
-    Centralized Feature Store for GlucoTwin ML modeling.
-
-    Key responsibilities:
-    1. Register feature schema, data types, and clinical descriptions.
-    2. Extract and combine static patient characteristics with dynamic time-series features.
-    3. Fit feature scalers (StandardScaler) strictly on training patient cohorts.
-    4. Provide normalized dynamic and static feature matrices ready for neural models (LSTM/GRU/Transformer)
-       and gradient-boosted trees (XGBoost/LightGBM).
-    5. Save and load feature store artifacts (scalers, column registries, metadata).
-    """
+    """Centralized Feature Store for GlucoTwin ML modeling."""
 
     def __init__(self, store_dir: Optional[Union[str, Path]] = None):
         self.store_dir = Path(store_dir) if store_dir else DATA_PROCESSED_DIR
@@ -179,13 +162,6 @@ class FeatureStore:
             "carb_protein_imbalance",
             "south_asian_phenotype_score",
             "urban_stress_index",
-            "tcf7l2_risk_alleles",
-            "pparg_protective",
-            "kcnj11_risk_alleles",
-            "slc30a8_risk_alleles",
-            "fto_risk_alleles",
-            "hla_dq_risk_flag",
-            "genetic_risk_score",
         ]
 
         self.feature_metadata = {
@@ -203,21 +179,7 @@ class FeatureStore:
     def build_features(
         self, ehr_df: pd.DataFrame, cgm_df: pd.DataFrame
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """
-        Executes static and temporal feature extraction on raw or processed inputs.
-
-        Parameters
-        ----------
-        ehr_df : pd.DataFrame
-            EHR clinical records.
-        cgm_df : pd.DataFrame
-            CGM & wearable time series.
-
-        Returns
-        -------
-        Tuple[pd.DataFrame, pd.DataFrame]
-            (static_features_df, temporal_features_df)
-        """
+        """Executes static and temporal feature extraction on raw or processed inputs."""
         logger.info("Building static and temporal feature sets...")
         static_feats = extract_static_features(ehr_df)
         temporal_feats = extract_temporal_features(cgm_df)
@@ -243,10 +205,7 @@ class FeatureStore:
         temporal_df: pd.DataFrame,
         train_patient_ids: List[str],
     ) -> "FeatureStore":
-        """
-        Fits StandardScalers strictly on the subset of data belonging to train_patient_ids.
-        Prevents test/val distribution leakage.
-        """
+        """Fits StandardScalers strictly on the subset of data belonging to train_patient_ids."""
         logger.info(
             f"Fitting FeatureStore scalers on {len(train_patient_ids)} training patients..."
         )

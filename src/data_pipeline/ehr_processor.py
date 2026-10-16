@@ -1,30 +1,4 @@
-"""
-GlucoTwin EHR Data Processor
-============================
-
-Comprehensive preprocessing and feature engineering pipeline for Electronic
-Health Records (EHR) of Type 2 Diabetes patients.
-
-Responsibilities:
-    1. Ingestion: Load raw patient EHR data (ehr_patients.csv)
-    2. Data Hygiene: Validate clinical ranges, impute missing values, enforce types
-    3. Categorical Encoding:
-        - OneHotEncoder for medication regimens
-        - LabelEncoder for ordinal and nominal clinical/demographic features
-        - Multi-label binary encoding for comorbidities
-    4. Numerical Standardization:
-        - StandardScaler normalization for continuous physiological biomarkers
-    5. Clinical Risk Stratification:
-        - Algorithmic scoring into Low, Medium, High, and Critical risk tiers
-          based on ADA/RSSDI glycemic and comorbidity guidelines
-    6. Export & Serialization:
-        - Processed tabular CSV: data/processed/ehr_processed.csv
-        - Feature array: data/processed/ehr_features.npy
-        - Model artifacts: Scalers, encoders, and feature metadata via joblib
-
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-"""
+"""GlucoTwin EHR Data Processor"""
 
 import sys
 import os
@@ -51,9 +25,7 @@ DEFAULT_RAW_PATH = PROJECT_ROOT / "data" / "raw" / "ehr_patients.csv"
 DEFAULT_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
-# ==============================================================================
 # CLINICAL SCHEMA CONSTANTS
-# ==============================================================================
 
 NUMERICAL_FEATURES = [
     "age",
@@ -71,8 +43,7 @@ NUMERICAL_FEATURES = [
     "creatinine",
     "egfr",
     "diabetes_duration_years",
-    "sleep_hours_avg",
-    "genetic_risk_score"
+    "sleep_hours_avg"
 ]
 
 CATEGORICAL_FEATURES = [
@@ -82,13 +53,7 @@ CATEGORICAL_FEATURES = [
     "physical_activity_level",
     "diet_type",
     "stress_level",
-    "family_history_diabetes",
-    "tcf7l2_rs7903146",
-    "pparg_rs1801282",
-    "kcnj11_rs5219",
-    "slc30a8_rs13266634",
-    "fto_rs9939609",
-    "hla_dq_risk"
+    "family_history_diabetes"
 ]
 
 KNOWN_COMORBIDITIES = [
@@ -119,35 +84,21 @@ CLINICAL_BOUNDS = {
     "creatinine": (0.3, 6.0),
     "egfr": (10.0, 150.0),
     "diabetes_duration_years": (0.0, 60.0),
-    "sleep_hours_avg": (2.0, 14.0),
-    "genetic_risk_score": (0.0, 1.0)
+    "sleep_hours_avg": (2.0, 14.0)
 }
 
 
-# ==============================================================================
 # EHR PROCESSOR CLASS
-# ==============================================================================
 
 class EHRProcessor:
-    """
-    Electronic Health Record (EHR) processing and feature engineering engine.
-    Handles data validation, categorical encoding, standardization, risk
-    stratification, and serialization for downstream ML models and inference.
-    """
+    """Electronic Health Record (EHR) processing and feature engineering engine."""
 
     def __init__(
         self,
         output_dir: Optional[Union[str, Path]] = None,
         scaler_type: str = "standard"
     ):
-        """
-        Initialize the EHRProcessor.
-
-        Args:
-            output_dir: Directory where processed files and transformer artifacts
-                        will be saved. Defaults to `data/processed`.
-            scaler_type: Type of numerical scaler to use ('standard' for StandardScaler).
-        """
+        """Initialize the EHRProcessor."""
         self.output_dir = Path(output_dir) if output_dir else DEFAULT_PROCESSED_DIR
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -171,19 +122,9 @@ class EHRProcessor:
         self.processed_df: Optional[pd.DataFrame] = None
         self.feature_matrix: Optional[np.ndarray] = None
 
-    # --------------------------------------------------------------------------
     # 1. LOAD
-    # --------------------------------------------------------------------------
     def load(self, filepath: Optional[Union[str, Path]] = None) -> pd.DataFrame:
-        """
-        Load raw EHR dataset from CSV.
-
-        Args:
-            filepath: Path to ehr_patients.csv. Defaults to data/raw/ehr_patients.csv.
-
-        Returns:
-            pd.DataFrame: Loaded raw EHR data.
-        """
+        """Load raw EHR dataset from CSV."""
         path = Path(filepath) if filepath else DEFAULT_RAW_PATH
         if not path.exists():
             raise FileNotFoundError(
@@ -197,23 +138,9 @@ class EHRProcessor:
         logger.info(f"Successfully loaded {len(df)} patient records with {df.shape[1]} columns.")
         return df
 
-    # --------------------------------------------------------------------------
     # 2. CLEAN & VALIDATE
-    # --------------------------------------------------------------------------
     def clean(self, df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
-        """
-        Clean and validate EHR records.
-        - Fills missing values with clinically sound defaults
-        - Enforces valid clinical ranges by clipping extreme non-physiological outliers
-        - Normalizes boolean and categorical strings
-        - Ensures standard datetime format for longitudinal records
-
-        Args:
-            df: DataFrame to clean. If None, uses loaded raw_df.
-
-        Returns:
-            pd.DataFrame: Cleaned patient DataFrame.
-        """
+        """Clean and validate EHR records."""
         if df is None:
             if self.raw_df is None:
                 self.load()
@@ -226,20 +153,6 @@ class EHRProcessor:
         # Handle null comorbidities
         if "comorbidities" in df.columns:
             df["comorbidities"] = df["comorbidities"].fillna("None").astype(str).str.strip()
-
-        # Default genetic markers if omitted in single-record inference payloads
-        genetic_defaults = {
-            "tcf7l2_rs7903146": "CT",
-            "pparg_rs1801282": "CC",
-            "kcnj11_rs5219": "CT",
-            "slc30a8_rs13266634": "CT",
-            "fto_rs9939609": "TA",
-            "hla_dq_risk": False,
-            "genetic_risk_score": 0.42,
-        }
-        for g_col, g_def in genetic_defaults.items():
-            if g_col not in df.columns:
-                df[g_col] = g_def
 
         # Enforce clinical bounds and impute missing numericals
         for col in NUMERICAL_FEATURES:
@@ -277,51 +190,9 @@ class EHRProcessor:
         logger.info(f"Cleaning complete. Validated {len(df)} patient records.")
         return df
 
-    # --------------------------------------------------------------------------
     # 3. CLINICAL RISK STRATIFICATION
-    # --------------------------------------------------------------------------
     def compute_risk_stratification(self, df: pd.DataFrame) -> Tuple[pd.Series, pd.Series, pd.Series]:
-        """
-        Stratify patients into clinical risk tiers: Low, Medium, High, Critical.
-        Based on Indian (RSSDI) & International (ADA) Type 2 Diabetes guidelines.
-
-        Scoring Logic:
-            1. HbA1c:
-               - < 7.0%: 0 pts (Controlled)
-               - 7.0 - 8.0%: 1 pt (Moderate)
-               - 8.0 - 9.0%: 2 pts (Sub-optimal)
-               - 9.0 - 10.0%: 3 pts (High risk)
-               - >= 10.0%: 4 pts (Severe / Critical)
-            2. Fasting Glucose:
-               - < 130 mg/dL: 0 pts
-               - 130 - 175 mg/dL: 1 pt
-               - 175 - 230 mg/dL: 2 pts
-               - >= 230 mg/dL: 3 pts
-            3. BMI:
-               - < 25.0: 0 pts
-               - 25.0 - 30.0: 1 pt
-               - >= 30.0: 2 pts
-            4. Comorbidities:
-               - Hypertension / Dyslipidemia: 1 pt each
-               - Organ damage (Neuropathy / Retinopathy / CKD): 2 pts each
-            5. Duration:
-               - >= 10 years: 1 pt
-
-        Risk Tier Mapping:
-            - 0 - 2 pts: Low
-            - 3 - 5 pts: Medium
-            - 6 - 8 pts: High
-            - >= 9 pts: Critical
-
-        Args:
-            df: Cleaned patient DataFrame.
-
-        Returns:
-            Tuple[pd.Series, pd.Series, pd.Series]:
-                - risk_category: Categorical text ('Low', 'Medium', 'High', 'Critical')
-                - risk_score: Numeric integer score
-                - risk_class: Integer class index (0, 1, 2, 3)
-        """
+        """Stratify patients into clinical risk tiers: Low, Medium, High, Critical."""
         scores = np.zeros(len(df), dtype=int)
 
         # 1. HbA1c points
@@ -372,25 +243,9 @@ class EHRProcessor:
             pd.Series(risk_class, index=df.index, name="risk_class")
         )
 
-    # --------------------------------------------------------------------------
     # 4. ENCODE CATEGORICALS & COMORBIDITIES
-    # --------------------------------------------------------------------------
     def encode(self, df: Optional[pd.DataFrame] = None, fit: bool = True) -> pd.DataFrame:
-        """
-        Encode categorical features, medication regimens, and comorbidities.
-
-        - OneHotEncoder on 'medication'
-        - LabelEncoder on categorical features
-        - Multi-label binary decomposition for 'comorbidities'
-        - Appends risk stratification
-
-        Args:
-            df: Cleaned patient DataFrame.
-            fit: Whether to fit encoders on this dataset.
-
-        Returns:
-            pd.DataFrame: DataFrame containing transformed categorical features.
-        """
+        """Encode categorical features, medication regimens, and comorbidities."""
         if df is None:
             if self.cleaned_df is None:
                 self.clean()
@@ -454,26 +309,13 @@ class EHRProcessor:
 
         return df
 
-    # --------------------------------------------------------------------------
     # 5. NORMALIZE NUMERICAL FEATURES
-    # --------------------------------------------------------------------------
     def normalize(
         self,
         df: Optional[pd.DataFrame] = None,
         fit: bool = True
     ) -> Tuple[pd.DataFrame, np.ndarray]:
-        """
-        Standardize continuous numerical biomarker features using StandardScaler.
-
-        Args:
-            df: DataFrame containing cleaned and encoded features.
-            fit: Whether to fit the scaler (True for training/batch, False for test/inference).
-
-        Returns:
-            Tuple[pd.DataFrame, np.ndarray]:
-                - df: DataFrame with added normalized columns (*_norm)
-                - feature_matrix: 2D numpy array of all model-ready features (N x D)
-        """
+        """Standardize continuous numerical biomarker features using StandardScaler."""
         if df is None:
             df = self.encode(fit=fit)
         else:
@@ -532,20 +374,9 @@ class EHRProcessor:
 
         return df, feature_matrix
 
-    # --------------------------------------------------------------------------
     # 6. GET FEATURE MATRIX
-    # --------------------------------------------------------------------------
     def get_features(self, df: Optional[pd.DataFrame] = None) -> np.ndarray:
-        """
-        Retrieve pure numerical feature matrix X ready for PyTorch / XGBoost.
-
-        Args:
-            df: Optional DataFrame to extract features from. If None, returns
-                internally cached feature matrix.
-
-        Returns:
-            np.ndarray: Feature matrix of shape (N, D), dtype float32.
-        """
+        """Retrieve pure numerical feature matrix X ready for PyTorch / XGBoost."""
         if df is None:
             if self.feature_matrix is None:
                 _, matrix = self.normalize(fit=True)
@@ -561,34 +392,14 @@ class EHRProcessor:
         _, matrix = self.normalize(encoded, fit=False)
         return matrix
 
-    # --------------------------------------------------------------------------
     # 7. ARTIFACT PERSISTENCE & SERIALIZATION
-    # --------------------------------------------------------------------------
     def save_artifacts(
         self,
         processed_df: Optional[pd.DataFrame] = None,
         feature_matrix: Optional[np.ndarray] = None,
         output_dir: Optional[Union[str, Path]] = None
     ) -> Dict[str, Path]:
-        """
-        Save processed dataset, feature matrix, and serialization artifacts to disk.
-
-        Saved Files:
-            - data/processed/ehr_processed.csv
-            - data/processed/ehr_features.npy
-            - data/processed/ehr_scaler.joblib
-            - data/processed/ehr_encoders.joblib
-            - data/processed/ehr_feature_names.joblib
-            - data/processed/ehr_metadata.json
-
-        Args:
-            processed_df: Processed DataFrame. Defaults to self.processed_df.
-            feature_matrix: NumPy feature matrix. Defaults to self.feature_matrix.
-            output_dir: Destination directory. Defaults to self.output_dir.
-
-        Returns:
-            Dict[str, Path]: Map of artifact names to file paths.
-        """
+        """Save processed dataset, feature matrix, and serialization artifacts to disk."""
         out_dir = Path(output_dir) if output_dir else self.output_dir
         out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -658,16 +469,9 @@ class EHRProcessor:
             "metadata": metadata_path
         }
 
-    # --------------------------------------------------------------------------
     # 8. LOAD SAVED ARTIFACTS (INFERENCE SUPPORT)
-    # --------------------------------------------------------------------------
     def load_artifacts(self, artifact_dir: Optional[Union[str, Path]] = None) -> None:
-        """
-        Load serialized scalers, encoders, and feature names from disk for inference.
-
-        Args:
-            artifact_dir: Directory containing saved artifacts. Defaults to self.output_dir.
-        """
+        """Load serialized scalers, encoders, and feature names from disk for inference."""
         art_dir = Path(artifact_dir) if artifact_dir else self.output_dir
 
         scaler_path = art_dir / "ehr_scaler.joblib"
@@ -688,21 +492,9 @@ class EHRProcessor:
 
         logger.info(f"Successfully loaded EHRProcessor artifacts from: {art_dir}")
 
-    # --------------------------------------------------------------------------
     # 9. SINGLE PATIENT INFERENCE TRANSFORM
-    # --------------------------------------------------------------------------
     def transform_single(self, patient_dict: Dict[str, Any]) -> np.ndarray:
-        """
-        Transform a single raw patient dictionary into a model-ready feature vector.
-        Essential for the Digital Twin API and real-time spike simulation.
-
-        Args:
-            patient_dict: Key-value dictionary containing patient parameters
-                          (e.g., {'age': 52, 'hba1c': 8.2, 'medication': 'Metformin', ...}).
-
-        Returns:
-            np.ndarray: 2D feature array of shape (1, D), dtype float32.
-        """
+        """Transform a single raw patient dictionary into a model-ready feature vector."""
         if not self.is_fitted:
             # Try to load existing artifacts if present
             self.load_artifacts()
@@ -713,27 +505,13 @@ class EHRProcessor:
         _, matrix = self.normalize(encoded, fit=False)
         return matrix
 
-    # --------------------------------------------------------------------------
     # 10. MASTER PIPELINE EXECUTION
-    # --------------------------------------------------------------------------
     def process_all(
         self,
         raw_path: Optional[Union[str, Path]] = None,
         output_dir: Optional[Union[str, Path]] = None
     ) -> Tuple[pd.DataFrame, np.ndarray]:
-        """
-        Execute end-to-end EHR processing pipeline:
-            load -> clean -> stratify -> encode -> normalize -> save_artifacts.
-
-        Args:
-            raw_path: Path to raw ehr_patients.csv.
-            output_dir: Destination path for processed data and artifacts.
-
-        Returns:
-            Tuple[pd.DataFrame, np.ndarray]:
-                - processed_df: Fully processed DataFrame.
-                - feature_matrix: Normalized float32 feature matrix.
-        """
+        """Execute end-to-end EHR processing pipeline:"""
         logger.info("=" * 80)
         logger.info("Starting GlucoTwin EHR Processing Pipeline")
         logger.info("=" * 80)
@@ -766,9 +544,7 @@ class EHRProcessor:
         return df_norm, feat_mat
 
 
-# ==============================================================================
 # CLI EXECUTION BLOCK
-# ==============================================================================
 
 if __name__ == "__main__":
     processor = EHRProcessor()

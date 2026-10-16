@@ -1,9 +1,4 @@
-"""
-GlucoTwin Data Pipeline Package
-===============================
-
-Data preprocessing, EHR normalization, and feature extraction modules.
-"""
+"""GlucoTwin Data Pipeline Package"""
 
 from .ehr_processor import (
     EHRProcessor,

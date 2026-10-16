@@ -1,182 +1,182 @@
 [
   {
-    "feature":"glucose_last",
-    "importance":542.631652832,
-    "relative_importance":8.8054323524,
+    "feature":"glucose_mean_30m",
+    "importance":745.8365478516,
+    "relative_importance":13.9732062791,
     "rank":1
   },
   {
-    "feature":"cos_time_of_day_min_2h",
-    "importance":508.3181762695,
-    "relative_importance":8.2486181764,
+    "feature":"glucose_last",
+    "importance":427.2976074219,
+    "relative_importance":8.0053969308,
     "rank":2
   },
   {
-    "feature":"glucose_mean_15m_last",
-    "importance":460.8714904785,
-    "relative_importance":7.4786878196,
+    "feature":"cos_time_of_day_min_2h",
+    "importance":339.331817627,
+    "relative_importance":6.3573627471,
     "rank":3
   },
   {
-    "feature":"glucose_mean_30m",
-    "importance":452.0957641602,
-    "relative_importance":7.3362817067,
+    "feature":"glucose_mean_15m_last",
+    "importance":314.388671875,
+    "relative_importance":5.8900542975,
     "rank":4
   },
   {
     "feature":"glucose_mean_30m_last",
-    "importance":435.7178955078,
-    "relative_importance":7.0705135493,
+    "importance":292.164642334,
+    "relative_importance":5.473688339,
     "rank":5
   },
   {
-    "feature":"sin_time_of_day_std_2h",
-    "importance":164.1305236816,
-    "relative_importance":2.6633909314,
+    "feature":"cos_time_of_day_last",
+    "importance":123.9027709961,
+    "relative_importance":2.3213115295,
     "rank":6
   },
   {
     "feature":"cos_time_of_day_mean_2h",
-    "importance":163.3127288818,
-    "relative_importance":2.6501203514,
+    "importance":122.4739456177,
+    "relative_importance":2.2945425655,
     "rank":7
   },
   {
-    "feature":"cos_time_of_day_max_2h",
-    "importance":157.725402832,
-    "relative_importance":2.5594532823,
+    "feature":"sin_time_of_day_std_2h",
+    "importance":117.6996231079,
+    "relative_importance":2.2050958985,
     "rank":8
   },
   {
-    "feature":"cos_time_of_day_last",
-    "importance":154.6768798828,
-    "relative_importance":2.509984066,
+    "feature":"cos_time_of_day_mean_30m",
+    "importance":86.2941894531,
+    "relative_importance":1.6167168442,
     "rank":9
   },
   {
     "feature":"is_nighttime_mean_2h",
-    "importance":101.7433547974,
-    "relative_importance":1.6510172661,
+    "importance":69.5824508667,
+    "relative_importance":1.3036233504,
     "rank":10
   },
   {
-    "feature":"sin_time_of_day_delta_30m",
-    "importance":99.763633728,
-    "relative_importance":1.6188917905,
+    "feature":"is_nighttime_last",
+    "importance":68.8093490601,
+    "relative_importance":1.289139331,
     "rank":11
   },
   {
-    "feature":"sin_time_of_day_mean_2h",
-    "importance":86.7073898315,
-    "relative_importance":1.4070245472,
+    "feature":"sin_time_of_day_delta_30m",
+    "importance":68.5046615601,
+    "relative_importance":1.2834310276,
     "rank":12
   },
   {
-    "feature":"cos_time_of_day_mean_30m",
-    "importance":84.7977981567,
-    "relative_importance":1.3760370804,
+    "feature":"cos_time_of_day_max_2h",
+    "importance":60.3174324036,
+    "relative_importance":1.1300437443,
     "rank":13
   },
   {
-    "feature":"is_nighttime_last",
-    "importance":77.6414260864,
-    "relative_importance":1.2599086721,
+    "feature":"glucose_rolling_mean_mean_2h",
+    "importance":54.2584152222,
+    "relative_importance":1.0165283941,
     "rank":14
   },
   {
-    "feature":"nocturnal_glucose_mean_last",
-    "importance":57.0780258179,
-    "relative_importance":0.9262207476,
+    "feature":"sin_time_of_day_mean_2h",
+    "importance":53.142124176,
+    "relative_importance":0.9956147434,
     "rank":15
   },
   {
-    "feature":"sin_time_of_day_last",
-    "importance":56.1116638184,
-    "relative_importance":0.9105393269,
+    "feature":"cos_time_of_day_std_2h",
+    "importance":48.5686416626,
+    "relative_importance":0.9099308027,
     "rank":16
   },
   {
-    "feature":"is_nighttime_mean_30m",
-    "importance":47.205291748,
-    "relative_importance":0.7660131896,
+    "feature":"sin_time_of_day_max_2h",
+    "importance":48.4293289185,
+    "relative_importance":0.9073207861,
     "rank":17
   },
   {
-    "feature":"meal_absorption_decay_delta_30m",
-    "importance":47.1352272034,
-    "relative_importance":0.7648762331,
+    "feature":"sin_time_of_day_last",
+    "importance":47.4099159241,
+    "relative_importance":0.8882221403,
     "rank":18
   },
   {
-    "feature":"postprandial_excursion_magnitude_mean_2h",
-    "importance":45.8254814148,
-    "relative_importance":0.7436226297,
+    "feature":"nocturnal_glucose_mean_max_2h",
+    "importance":46.028755188,
+    "relative_importance":0.8623461707,
     "rank":19
   },
   {
-    "feature":"glucose_rolling_mean_mean_2h",
-    "importance":43.6669616699,
-    "relative_importance":0.708595739,
+    "feature":"glucose_range_1h_mean_2h",
+    "importance":38.4583816528,
+    "relative_importance":0.7205156432,
     "rank":20
   },
   {
-    "feature":"glucose_rolling_std_max_2h",
-    "importance":41.0431480408,
-    "relative_importance":0.666018397,
+    "feature":"meal_absorption_decay_delta_30m",
+    "importance":37.168548584,
+    "relative_importance":0.6963506923,
     "rank":21
   },
   {
-    "feature":"nocturnal_glucose_mean_max_2h",
-    "importance":40.4460868835,
-    "relative_importance":0.6563297222,
+    "feature":"nocturnal_glucose_mean_last",
+    "importance":34.540397644,
+    "relative_importance":0.6471124305,
     "rank":22
   },
   {
-    "feature":"nocturnal_glucose_mean_mean_2h",
-    "importance":40.3657569885,
-    "relative_importance":0.655026187,
+    "feature":"is_postprandial_window_mean_2h",
+    "importance":31.9830856323,
+    "relative_importance":0.5992013321,
     "rank":23
   },
   {
-    "feature":"nocturnal_glucose_mean_min_2h",
-    "importance":39.5863037109,
-    "relative_importance":0.6423777854,
+    "feature":"postprandial_excursion_magnitude_mean_2h",
+    "importance":30.7592544556,
+    "relative_importance":0.576272923,
     "rank":24
   },
   {
-    "feature":"glucose_min_2h",
-    "importance":37.9001846313,
-    "relative_importance":0.6150166695,
+    "feature":"nocturnal_glucose_mean_min_2h",
+    "importance":30.4228496552,
+    "relative_importance":0.5699703977,
     "rank":25
   },
   {
-    "feature":"cos_time_of_day_std_2h",
-    "importance":34.4068260193,
-    "relative_importance":0.5583289832,
+    "feature":"glucose_min_2h",
+    "importance":29.0786762238,
+    "relative_importance":0.5447873832,
     "rank":26
   },
   {
-    "feature":"hba1c",
-    "importance":34.1551971436,
-    "relative_importance":0.5542457326,
+    "feature":"glucose_volatility_index_mean_2h",
+    "importance":28.3190059662,
+    "relative_importance":0.5305550031,
     "rank":27
   },
   {
-    "feature":"time_in_range_min_2h",
-    "importance":31.8894119263,
-    "relative_importance":0.5174782157,
+    "feature":"glucose_std_1h_mean_2h",
+    "importance":25.52643013,
+    "relative_importance":0.47823625,
     "rank":28
   },
   {
-    "feature":"time_in_range_std_2h",
-    "importance":27.4956607819,
-    "relative_importance":0.4461796133,
+    "feature":"nocturnal_glucose_mean_mean_30m",
+    "importance":24.5617027283,
+    "relative_importance":0.4601621358,
     "rank":29
   },
   {
-    "feature":"postprandial_excursion_ratio_mean_2h",
-    "importance":27.3421783447,
-    "relative_importance":0.4436890117,
+    "feature":"glucose_rolling_mean_delta_2h",
+    "importance":23.8557071686,
+    "relative_importance":0.4469353482,
     "rank":30
   }
 ]

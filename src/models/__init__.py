@@ -1,9 +1,4 @@
-"""
-GlucoTwin Machine Learning Models
-=================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-"""
+"""GlucoTwin Machine Learning Models"""
 
 from src.models.ensemble import GlucoTwinEnsemble
 from src.models.lstm_model import GlucoseLSTM, TemporalAttention

@@ -1,11 +1,4 @@
-"""
-GlucoTwin: CGM and Wearable Time-Series Data Processor
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Ingests, cleans, resamples, and computes clinical CGM and wearable sensor metrics
-for continuous glucose spike prediction in Type 2 Diabetes patients.
-"""
+"""GlucoTwin: CGM and Wearable Time-Series Data Processor"""
 
 from __future__ import annotations
 
@@ -33,21 +26,7 @@ DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 class CGMProcessor:
-    """
-    Production data pipeline for continuous glucose monitor (CGM) and wearable telemetry.
-
-    Key responsibilities:
-    1. Load raw 5-minute CGM and wearable records.
-    2. Remove non-physiological artifacts and handle sensor dropouts.
-    3. Resample onto strict 5-minute uniform temporal grids.
-    4. Compute 2-hour rolling glycemic parameters (mean, std, rate of change, acceleration,
-       time-in-range 70-180 mg/dL, coefficient of variation, trend categorization).
-    5. Compute 1-hour cardiovascular metrics (rolling mean, SDNN HRV, resting HR).
-    6. Compute activity metrics (hourly step volume, active minutes, sedentary minutes).
-    7. Compute sleep architecture metrics (duration, efficiency, deep and REM percentages).
-    8. Generate 2-hour forward-looking binary spike labels (Target: glucose >= 180 mg/dL).
-    9. Export processed time-series to data/processed/cgm_processed.csv.
-    """
+    """Production data pipeline for continuous glucose monitor (CGM) and wearable telemetry."""
 
     def __init__(
         self,
@@ -68,10 +47,7 @@ class CGMProcessor:
         self.metrics_computed: bool = False
 
     def load(self, filepath: Optional[Union[str, Path, pd.DataFrame]] = None) -> pd.DataFrame:
-        """
-        Loads CGM and wearable readings from CSV file or existing DataFrame.
-        If file does not exist, generates synthetic 200-patient Indian T2D telemetry.
-        """
+        """Loads CGM and wearable readings from CSV file or existing DataFrame."""
         if isinstance(filepath, pd.DataFrame):
             self.df = filepath.copy()
             logger.info(f"Loaded {len(self.df)} CGM readings from provided DataFrame.")
@@ -127,14 +103,7 @@ class CGMProcessor:
         return self.df
 
     def clean(self) -> pd.DataFrame:
-        """
-        Handles physiologically implausible sensor artifacts and missing values:
-        - Glucose: valid bounds [20, 600] mg/dL (values outside clipped or set to NaN; forward fill).
-        - Heart Rate: valid bounds [30, 220] bpm (linear interpolation).
-        - Steps: valid bounds [0, 1500] steps per 5 min (negative steps set to 0, outliers clipped).
-        - Sleep status: forward fill and fallback to 0.
-        All imputation is strictly isolated per patient.
-        """
+        """Handles physiologically implausible sensor artifacts and missing values:"""
         if self.df is None:
             raise ValueError("No data loaded. Call load() before clean().")
 
@@ -201,10 +170,7 @@ class CGMProcessor:
         return self.df
 
     def resample(self, interval: str = "5min") -> pd.DataFrame:
-        """
-        Ensures consistent, unbroken temporal intervals (default: 5 minutes) per patient.
-        Missing timesteps are reindexed and smoothly interpolated.
-        """
+        """Ensures consistent, unbroken temporal intervals (default: 5 minutes) per patient."""
         if self.df is None:
             raise ValueError("No data loaded. Call load() and clean() first.")
 
@@ -273,16 +239,7 @@ class CGMProcessor:
         return self.df
 
     def compute_glucose_metrics(self, window: str = "2h") -> pd.DataFrame:
-        """
-        Computes rolling glucose metrics over the specified lookback window (default: 2h / 24 steps):
-        - glucose_rolling_mean
-        - glucose_rolling_std
-        - glucose_rate_of_change (mg/dL per 5min interval)
-        - glucose_acceleration (diff of rate of change)
-        - time_in_range (70-180 mg/dL % over last 2h)
-        - coefficient_of_variation (rolling_std / rolling_mean * 100)
-        - glucose_trend ('rising_fast', 'rising', 'stable', 'falling', 'falling_fast')
-        """
+        """Computes rolling glucose metrics over the specified lookback window (default: 2h / 24 steps):"""
         if self.df is None:
             raise ValueError("No data available. Call load() first.")
 
@@ -332,12 +289,7 @@ class CGMProcessor:
         return self.df
 
     def compute_hr_metrics(self, window: str = "1h") -> pd.DataFrame:
-        """
-        Computes 1-hour rolling heart rate and autonomic variability metrics:
-        - hr_rolling_mean (1h rolling average)
-        - hr_variability (SDNN approximation: rolling standard deviation of HR)
-        - hr_resting (minimum HR during sleep / nighttime rest)
-        """
+        """Computes 1-hour rolling heart rate and autonomic variability metrics:"""
         if self.df is None:
             raise ValueError("No data available.")
 
@@ -366,12 +318,7 @@ class CGMProcessor:
         return self.df
 
     def compute_activity_metrics(self, window: str = "1h") -> pd.DataFrame:
-        """
-        Computes physical activity features over rolling 1-hour windows:
-        - steps_hourly: total steps in the last 1 hour
-        - active_minutes: minutes with steps > 40 in 1h window
-        - sedentary_minutes: minutes with steps <= 10 in 1h window
-        """
+        """Computes physical activity features over rolling 1-hour windows:"""
         if self.df is None:
             raise ValueError("No data available.")
 
@@ -400,13 +347,7 @@ class CGMProcessor:
         return self.df
 
     def compute_sleep_metrics(self) -> pd.DataFrame:
-        """
-        Computes sleep architecture metrics per patient:
-        - sleep_duration: total hours of sleep per 24h rolling cycle
-        - sleep_efficiency: percentage of time in bed actually asleep (80-98%)
-        - deep_sleep_percentage: percentage of deep sleep stage
-        - rem_percentage: percentage of rapid eye movement (REM) sleep
-        """
+        """Computes sleep architecture metrics per patient:"""
         if self.df is None:
             raise ValueError("No data available.")
 
@@ -452,23 +393,7 @@ class CGMProcessor:
     def create_spike_labels(
         self, threshold: Optional[float] = None, lookahead: str = "2h"
     ) -> pd.DataFrame:
-        """
-        Creates binary classification labels for glycemic spike prediction:
-        TARGET: Will glucose exceed `threshold` (default 180 mg/dL) within the next 2 hours?
-
-        Parameters
-        ----------
-        threshold : float, optional
-            Glucose threshold in mg/dL defining hyperglycemia / spike (default: 180.0 mg/dL).
-        lookahead : str, optional
-            Lookahead time horizon (default: '2h' = 24 * 5-minute steps).
-
-        Returns
-        -------
-        pd.DataFrame
-            Enriched DataFrame with `spike_label` (0 or 1), `future_peak_glucose`,
-            and `time_to_spike_min`.
-        """
+        """Creates binary classification labels for glycemic spike prediction:"""
         if self.df is None:
             raise ValueError("No data available.")
 
@@ -512,11 +437,7 @@ class CGMProcessor:
         return self.df
 
     def process_all(self, save: bool = True, output_path: Optional[Union[str, Path]] = None) -> pd.DataFrame:
-        """
-        Executes the entire end-to-end CGM and wearable data processing pipeline:
-        load -> clean -> resample -> glucose metrics -> HR metrics -> activity metrics
-        -> sleep metrics -> spike labels -> save to CSV.
-        """
+        """Executes the entire end-to-end CGM and wearable data processing pipeline:"""
         logger.info("Executing comprehensive CGMProcessor pipeline...")
         if self.df is None:
             self.load()
@@ -546,11 +467,7 @@ class CGMProcessor:
         seed: int = 42,
         save_path: Optional[Union[str, Path]] = None,
     ) -> pd.DataFrame:
-        """
-        Generates realistic continuous 5-minute CGM and wearable sensor telemetry for 200 Indian T2D patients.
-        Incorporates circadian glycemic oscillations, postprandial glycemic excursions
-        modeled after Indian meals, dawn phenomenon, physical activity, and nocturnal sleep.
-        """
+        """Generates realistic continuous 5-minute CGM and wearable sensor telemetry for 200 Indian T2D patients."""
         np.random.seed(seed)
         logger.info(
             f"Synthesizing high-fidelity CGM & wearable telemetry for {num_patients} patients over {days} days..."

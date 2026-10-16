@@ -1,6 +1,6 @@
 {
   "dynamic_features_count": 50,
-  "static_features_count": 53,
+  "static_features_count": 46,
   "target": "spike_label",
   "sampling_interval": "5min",
   "lookback_sequence_length": 24,
@@ -107,13 +107,6 @@
     "protein_intake_adequacy",
     "carb_protein_imbalance",
     "south_asian_phenotype_score",
-    "urban_stress_index",
-    "tcf7l2_risk_alleles",
-    "pparg_protective",
-    "kcnj11_risk_alleles",
-    "slc30a8_risk_alleles",
-    "fto_risk_alleles",
-    "hla_dq_risk_flag",
-    "genetic_risk_score"
+    "urban_stress_index"
   ]
 }

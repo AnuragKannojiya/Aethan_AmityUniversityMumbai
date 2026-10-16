@@ -1,14 +1,4 @@
-"""
-GlucoTwin: Multimodal Glucose Spike Prediction - PyTorch LSTM with Temporal Attention
-=====================================================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Deep learning architecture for fusing continuous dynamic sensor telemetry
-(interstitial glucose kinetics, circadian cycles, heart rate variability, physical activity)
-with static Electronic Health Records (EHR demographics, clinical biomarkers, medications)
-to forecast 2-hour forward glucose spikes (>180 mg/dL) for Type 2 Diabetes patients.
-"""
+"""GlucoTwin: Multimodal Glucose Spike Prediction - PyTorch LSTM with Temporal Attention"""
 
 from __future__ import annotations
 
@@ -24,13 +14,7 @@ logger = logging.getLogger("glucotwin.models.lstm")
 
 
 class TemporalAttention(nn.Module):
-    """
-    Bahdanau-style self-attention mechanism over recurrent hidden states.
-
-    Learns an attention weight distribution across lookback time-steps,
-    amplifying critical events (e.g., rapid postprandial glucose momentum,
-    sudden drop in physical activity) while suppressing steady-state noise.
-    """
+    """Bahdanau-style self-attention mechanism over recurrent hidden states."""
 
     def __init__(self, hidden_dim: int, attention_dim: int = 64):
         super().__init__()
@@ -41,19 +25,7 @@ class TemporalAttention(nn.Module):
         )
 
     def forward(self, lstm_outputs: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Parameters
-        ----------
-        lstm_outputs : torch.Tensor
-            Tensor of shape (batch_size, seq_len, hidden_dim).
-
-        Returns
-        -------
-        context_vector : torch.Tensor
-            Attended context representation of shape (batch_size, hidden_dim).
-        attention_weights : torch.Tensor
-            Normalized softmax weights of shape (batch_size, seq_len).
-        """
+        """Parameters"""
         # Energy scores: (batch_size, seq_len, 1) -> squeeze to (batch_size, seq_len)
         scores = self.projection(lstm_outputs).squeeze(-1)
         # Softmax along sequence dimension
@@ -65,25 +37,7 @@ class TemporalAttention(nn.Module):
 
 
 class GlucoseLSTM(nn.Module):
-    """
-    Multimodal Dual-Branch Neural Architecture for Glucose Spike Prediction.
-
-    Branch 1 (Dynamic/Temporal):
-        Input shape: (batch_size, 24 timesteps, 54 features)
-        - 2-layer stacked LSTM (hidden_size=128, dropout=0.3)
-        - Self-attention pooling over 24 lookback steps -> 128-dim context
-
-    Branch 2 (Static/Clinical):
-        Input shape: (batch_size, 46 static EHR features)
-        - Dense MLP: Linear(46, 64) -> ReLU -> Linear(64, 64) -> ReLU -> 64-dim representation
-
-    Multimodal Fusion:
-        - Concatenation: 128 (attended temporal) + 64 (static EHR) = 192 dimensions
-
-    Classification Head:
-        - Linear(192, 64) -> ReLU -> Dropout(0.3) -> Linear(64, 64) -> ReLU -> Linear(64, 1) -> Sigmoid
-        - Outputs continuous probability P(glucose > 180 mg/dL within 2 hours).
-    """
+    """Multimodal Dual-Branch Neural Architecture for Glucose Spike Prediction."""
 
     def __init__(
         self,
@@ -146,24 +100,7 @@ class GlucoseLSTM(nn.Module):
         x_static: torch.Tensor,
         return_attention: bool = False,
     ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
-        """
-        Forward computation pass.
-
-        Parameters
-        ----------
-        x_temporal : torch.Tensor
-            Batch of temporal lookback windows of shape (batch, 24, 54).
-        x_static : torch.Tensor
-            Batch of static patient characteristics of shape (batch, 46).
-        return_attention : bool, default=False
-            If True, returns tuple of (spike_probability, attention_weights).
-
-        Returns
-        -------
-        torch.Tensor or Tuple[torch.Tensor, torch.Tensor]
-            Predicted spike probability of shape (batch, 1) in [0, 1].
-            Optionally attention weights of shape (batch, 24).
-        """
+        """Forward computation pass."""
         # 1. Recurrent sequence encoding
         lstm_out, _ = self.lstm(x_temporal)  # (batch, seq_len, 128)
 
@@ -189,23 +126,7 @@ class GlucoseLSTM(nn.Module):
         x_static: Optional[Union[np.ndarray, torch.Tensor]] = None,
         device: Optional[torch.device] = None,
     ) -> np.ndarray:
-        """
-        Extracts temporal attention weights across the lookback horizon.
-
-        Parameters
-        ----------
-        x_temporal : np.ndarray or torch.Tensor
-            Temporal sequence tensor of shape (batch, 24, 54) or (24, 54).
-        x_static : np.ndarray or torch.Tensor, optional
-            Static patient characteristics.
-        device : torch.device, optional
-            Target device for computation.
-
-        Returns
-        -------
-        np.ndarray
-            Attention weights array of shape (batch, 24) or (24,).
-        """
+        """Extracts temporal attention weights across the lookback horizon."""
         self.eval()
         if device is None:
             device = next(self.parameters()).device
@@ -238,25 +159,7 @@ class GlucoseLSTM(nn.Module):
         device: Optional[torch.device] = None,
         batch_size: int = 1024,
     ) -> np.ndarray:
-        """
-        Compute predicted spike probability for batches of arbitrary size.
-
-        Parameters
-        ----------
-        x_temporal : np.ndarray or torch.Tensor
-            Input temporal sequences, shape (N, 24, 54).
-        x_static : np.ndarray or torch.Tensor
-            Input static features, shape (N, 46).
-        device : torch.device, optional
-            Compute device.
-        batch_size : int, default=1024
-            Batch size for evaluation.
-
-        Returns
-        -------
-        np.ndarray
-            Predicted spike probabilities, shape (N,).
-        """
+        """Compute predicted spike probability for batches of arbitrary size."""
         self.eval()
         if device is None:
             device = next(self.parameters()).device
@@ -300,23 +203,7 @@ class GlucoseLSTM(nn.Module):
         threshold: float = 0.5,
         device: Optional[torch.device] = None,
     ) -> np.ndarray:
-        """
-        Binary prediction of glucose spike within 2 hours.
-
-        Parameters
-        ----------
-        x_temporal : np.ndarray or torch.Tensor
-            Shape (N, 24, 54).
-        x_static : np.ndarray or torch.Tensor
-            Shape (N, 46).
-        threshold : float, default=0.5
-            Decision boundary probability.
-
-        Returns
-        -------
-        np.ndarray
-            Binary predictions array (0 or 1), shape (N,).
-        """
+        """Binary prediction of glucose spike within 2 hours."""
         probs = self.predict_proba(x_temporal, x_static, device=device)
         if np.isscalar(probs):
             return int(probs >= threshold)

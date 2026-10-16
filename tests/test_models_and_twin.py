@@ -1,9 +1,4 @@
-"""
-Unit & Integration Tests for GlucoTwin ML Models and Digital Twin Engine
-========================================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-"""
+"""Unit & Integration Tests for GlucoTwin ML Models and Digital Twin Engine"""
 
 import unittest
 from pathlib import Path

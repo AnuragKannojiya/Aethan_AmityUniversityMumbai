@@ -1,13 +1,4 @@
-"""
-GlucoTwin: Tabular Gradient Boosting Model for Glucose Spike Prediction
-=======================================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Extracts rolling summary statistics and trajectory momentum features across
-temporal CGM/wearable sequences, fuses them with static clinical EHR records,
-and trains an imbalanced-aware XGBoost classifier to forecast glucose spikes.
-"""
+"""GlucoTwin: Tabular Gradient Boosting Model for Glucose Spike Prediction"""
 
 from __future__ import annotations
 
@@ -24,18 +15,7 @@ logger = logging.getLogger("glucotwin.models.xgboost")
 
 
 class GlucoseXGBoost:
-    """
-    Gradient Boosted Decision Tree pipeline for multimodal glucose spike prediction.
-
-    Capabilities:
-    1. Feature engineering: flattens 3D temporal sequences (batch, 24, 54) into
-       statistically rich summary features (last value, 2h mean, std, min, max,
-       2h delta, 30m rolling mean, 30m velocity) and fuses them with 46 static EHR features.
-    2. Imbalanced class handling: automatically calibrates scale_pos_weight based on class ratio.
-    3. Scalable histogram-based tree learning (tree_method='hist') for fast execution.
-    4. Feature importance extraction for clinical explainability.
-    5. Native model persistence (JSON and bundle serialization).
-    """
+    """Gradient Boosted Decision Tree pipeline for multimodal glucose spike prediction."""
 
     def __init__(
         self,
@@ -65,9 +45,7 @@ class GlucoseXGBoost:
         self.is_fitted: bool = False
         self.effective_scale_pos_weight: float = 1.0
 
-    # -------------------------------------------------------------------------
     # Feature Flattening & Summary Statistics
-    # -------------------------------------------------------------------------
 
     @staticmethod
     def extract_tabular_features(
@@ -76,40 +54,7 @@ class GlucoseXGBoost:
         dynamic_names: Optional[List[str]] = None,
         static_names: Optional[List[str]] = None,
     ) -> Tuple[np.ndarray, List[str]]:
-        """
-        Transforms 3D temporal sequences (N, 24, 54) and static features (N, 46)
-        into a flattened 2D tabular matrix with rolling summary statistics.
-
-        Statistical features extracted per dynamic variable:
-        - Last timestep value (current physiological state)
-        - Mean across 24 timesteps (2-hour basal average)
-        - Standard deviation across 24 timesteps (glycemic/physiologic variability)
-        - Minimum across 24 timesteps (nadir)
-        - Maximum across 24 timesteps (peak)
-        - 2-hour delta: last step - first step (macro trajectory momentum)
-        - 30-minute rolling mean: last 6 steps (recent short-term mean)
-        - 30-minute delta: last step - 6th from end (short-term velocity)
-
-        Total tabular features = 54 * 8 + 46 = 478 features.
-
-        Parameters
-        ----------
-        X_temporal : np.ndarray
-            Temporal sequences of shape (N, 24, 54).
-        X_static : np.ndarray
-            Static EHR features of shape (N, 46).
-        dynamic_names : List[str], optional
-            Names of the 54 dynamic features.
-        static_names : List[str], optional
-            Names of the 46 static EHR features.
-
-        Returns
-        -------
-        X_flat : np.ndarray
-            Tabular feature matrix of shape (N, 478), dtype float32.
-        feature_names : List[str]
-            Interpretability names corresponding to each column.
-        """
+        """Transforms 3D temporal sequences (N, 24, 54) and static features (N, 46)"""
         if X_temporal.ndim == 2:
             X_temporal = np.expand_dims(X_temporal, axis=0)
         if X_static.ndim == 1:
@@ -190,9 +135,7 @@ class GlucoseXGBoost:
                 return flat_x
         return np.asarray(X, dtype=np.float32)
 
-    # -------------------------------------------------------------------------
     # Training & Evaluation
-    # -------------------------------------------------------------------------
 
     def train(
         self,
@@ -202,27 +145,7 @@ class GlucoseXGBoost:
         early_stopping_rounds: int = 15,
         verbose: bool = False,
     ) -> "GlucoseXGBoost":
-        """
-        Train the XGBoost classifier with class weighting and optional early stopping.
-
-        Parameters
-        ----------
-        X : np.ndarray or Tuple[np.ndarray, np.ndarray]
-            Flattened feature matrix or tuple of (X_temporal, X_static).
-        y : np.ndarray
-            Binary target labels (0 or 1).
-        eval_set : List[Tuple[Any, np.ndarray]], optional
-            List of (X_val, y_val) validation splits.
-        early_stopping_rounds : int, default=15
-            Rounds of stagnation before stopping.
-        verbose : bool, default=False
-            Whether to log progress during boosting.
-
-        Returns
-        -------
-        self : GlucoseXGBoost
-            Fitted estimator.
-        """
+        """Train the XGBoost classifier with class weighting and optional early stopping."""
         X_train_flat = self._prepare_input(X)
         y_train = np.asarray(y, dtype=np.int32).ravel()
 
@@ -282,30 +205,14 @@ class GlucoseXGBoost:
         logger.info("XGBoost training complete. Best iteration: %s", getattr(self.model, "best_iteration", "N/A"))
         return self
 
-    # -------------------------------------------------------------------------
     # Inference
-    # -------------------------------------------------------------------------
 
     def predict_proba(
         self,
         X: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
         return_2d: bool = False,
     ) -> np.ndarray:
-        """
-        Compute predicted probability of glucose spike (>180 mg/dL within 2 hours).
-
-        Parameters
-        ----------
-        X : np.ndarray or Tuple[np.ndarray, np.ndarray]
-            Features matrix or tuple (X_temporal, X_static).
-        return_2d : bool, default=False
-            If True, returns shape (N, 2) [P(0), P(1)]. Otherwise returns P(1) shape (N,).
-
-        Returns
-        -------
-        np.ndarray
-            Spike probability array.
-        """
+        """Compute predicted probability of glucose spike (>180 mg/dL within 2 hours)."""
         if not self.is_fitted or self.model is None:
             raise RuntimeError("GlucoseXGBoost model is not fitted yet.")
 
@@ -325,50 +232,20 @@ class GlucoseXGBoost:
         X: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]],
         threshold: float = 0.5,
     ) -> np.ndarray:
-        """
-        Binary prediction of glucose spike event.
-
-        Parameters
-        ----------
-        X : np.ndarray or Tuple[np.ndarray, np.ndarray]
-            Input features.
-        threshold : float, default=0.5
-            Decision boundary probability.
-
-        Returns
-        -------
-        np.ndarray
-            Binary predictions (0 or 1).
-        """
+        """Binary prediction of glucose spike event."""
         probs = self.predict_proba(X, return_2d=False)
         if np.isscalar(probs):
             return int(probs >= threshold)
         return (probs >= threshold).astype(int)
 
-    # -------------------------------------------------------------------------
     # Explainability & Feature Importance
-    # -------------------------------------------------------------------------
 
     def get_feature_importance(
         self,
         top_n: int = 20,
         importance_type: str = "gain",
     ) -> pd.DataFrame:
-        """
-        Extract ranked feature importances for clinical interpretability.
-
-        Parameters
-        ----------
-        top_n : int, default=20
-            Number of top features to return.
-        importance_type : str, default='gain'
-            Type of importance: 'gain', 'weight', 'cover', 'total_gain'.
-
-        Returns
-        -------
-        pd.DataFrame
-            DataFrame with columns ['rank', 'feature', 'importance', 'relative_importance'].
-        """
+        """Extract ranked feature importances for clinical interpretability."""
         if not self.is_fitted or self.model is None:
             raise RuntimeError("Model is not fitted yet.")
 
@@ -392,9 +269,7 @@ class GlucoseXGBoost:
 
         return df.head(top_n)
 
-    # -------------------------------------------------------------------------
     # Persistence
-    # -------------------------------------------------------------------------
 
     def save(self, filepath: Union[str, Path]) -> None:
         """Persist XGBoost model and feature schema metadata."""

@@ -1,9 +1,4 @@
-"""
-Unit & Integration Tests for CGM Processor, Feature Engineering & Data Fusion
-=============================================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-"""
+"""Unit & Integration Tests for CGM Processor, Feature Engineering & Data Fusion"""
 
 import sys
 import unittest

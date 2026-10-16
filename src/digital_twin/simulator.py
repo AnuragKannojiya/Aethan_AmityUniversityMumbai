@@ -1,13 +1,4 @@
-"""
-GlucoTwin: Patient Physiological Simulator & Counterfactual Engine
-==================================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Simulates biological glucose-insulin dynamics in response to clinical and lifestyle
-interventions (pharmacotherapy, GLUT4 exercise uptake, meal carbohydrate absorption, hydration)
-and generates counterfactual 'what-if' trajectory projections for Type 2 Diabetes patients.
-"""
+"""GlucoTwin: Patient Physiological Simulator & Counterfactual Engine"""
 
 from __future__ import annotations
 
@@ -22,22 +13,7 @@ logger = logging.getLogger("glucotwin.digital_twin.simulator")
 
 
 class PatientSimulator:
-    """
-    Biophysically-grounded Digital Twin Simulation Engine.
-
-    Models physiological response curves for:
-    1. Physical Activity / Walking:
-       - Stimulates insulin-independent GLUT4 glucose transporter translocation
-       - Onset: 10-15 min, Peak clearance: 35-55 min, Sustained tail: up to 120 min
-    2. Pharmacological Interventions:
-       - Metformin: inhibits hepatic gluconeogenesis, enhances peripheral insulin sensitivity
-       - Exogenous Insulin: 2-compartment absorption model with rapid clearance peak
-    3. Meal & Dietary Excursions:
-       - Dual-compartment gastric emptying and intestinal carbohydrate absorption
-       - Excursion curve modulated by patient HbA1c (beta-cell reserve & insulin resistance)
-    4. Hydration:
-       - Mild plasma volume re-expansion and renal glucosuria enhancement
-    """
+    """Biophysically-grounded Digital Twin Simulation Engine."""
 
     @classmethod
     def simulate_glucose_response(
@@ -50,31 +26,7 @@ class PatientSimulator:
         intensity: str = "moderate",
         start_time: Optional[datetime] = None,
     ) -> List[Dict[str, Any]]:
-        """
-        Simulate the forward glucose trajectory under a specific intervention.
-
-        Parameters
-        ----------
-        current_glucose : float
-            Starting glucose reading in mg/dL.
-        intervention : str
-            Type of intervention ('exercise', 'walk', 'medication', 'insulin', 'meal', 'water').
-        patient_profile : Dict[str, Any], optional
-            Static patient attributes (hba1c, bmi, medication).
-        duration_minutes : int, default=120
-            Simulation horizon in minutes (2 hours).
-        time_step_minutes : int, default=10
-            Interval between simulated trajectory points.
-        intensity : str, default='moderate'
-            Intervention intensity ('light', 'moderate', 'vigorous').
-        start_time : datetime, optional
-            Base timestamp for time series.
-
-        Returns
-        -------
-        List[Dict[str, Any]]
-            List of simulated points: [{"time": ISO, "glucose": float, "delta": float}].
-        """
+        """Simulate the forward glucose trajectory under a specific intervention."""
         profile = patient_profile or {}
         hba1c = float(profile.get("hba1c", 8.0))
         bmi = float(profile.get("bmi", 27.0))
@@ -125,31 +77,7 @@ class PatientSimulator:
         intensity: str = "moderate",
         patient_profile: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
-        """
-        Produce a counterfactual comparison between natural predicted baseline
-        and the simulated intervention trajectory.
-
-        Parameters
-        ----------
-        baseline_trajectory : List[Dict[str, Any]]
-            Natural predicted trajectory [{"time": ..., "glucose": ...}].
-        intervention : str
-            Target intervention ('exercise', 'medication', 'meal', 'drink_water').
-        intensity : str, default='moderate'
-            Specification: light, moderate, vigorous.
-        patient_profile : Dict[str, Any], optional
-            Patient clinical EHR context.
-
-        Returns
-        -------
-        Dict[str, Any]
-            Counterfactual analysis payload matching API InterventionResponse format:
-            - baseline_trajectory
-            - intervention_trajectory
-            - expected_improvement
-            - peak_reduction_mg_dl
-            - spike_averted
-        """
+        """Produce a counterfactual comparison between natural predicted baseline"""
         profile = patient_profile or {}
         hba1c = float(profile.get("hba1c", 8.0))
         bmi = float(profile.get("bmi", 27.0))
@@ -234,9 +162,7 @@ class PatientSimulator:
             "time_in_range_gain_pct": tir_gain_pct,
         }
 
-    # -------------------------------------------------------------------------
     # Physiological Response Curves
-    # -------------------------------------------------------------------------
 
     @classmethod
     def _compute_kinetic_delta(
@@ -246,10 +172,7 @@ class PatientSimulator:
         intensity_mult: float,
         insulin_resistance: float,
     ) -> float:
-        """
-        Computes glucose delta (mg/dL) at minute t_min for an intervention.
-        Negative delta = reduction, Positive delta = elevation.
-        """
+        """Computes glucose delta (mg/dL) at minute t_min for an intervention."""
         if "exercise" in itype or "walk" in itype or "activity" in itype:
             # Exercise curve: Sigmoidal onset at 15m, peaks at 45m, exponential decay
             # Peak reduction ~36 mg/dL * intensity_mult

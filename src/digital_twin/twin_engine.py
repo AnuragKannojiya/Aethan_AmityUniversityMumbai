@@ -1,15 +1,4 @@
-"""
-GlucoTwin: Personalized Digital Twin Engine for Type 2 Diabetes
-===============================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Maintains an individualized in-silico computational twin of each patient,
-synchronizing real-time continuous glucose monitor (CGM) and wearable telemetry
-with baseline EHR clinical records. Fuses multi-modal AI predictions (LSTM + XGBoost)
-to forecast 2-hour forward glycemic trajectories, evaluate acute risk tiers,
-trigger intelligent alerts, and simulate 'what-if' therapeutic counterfactuals.
-"""
+"""GlucoTwin: Personalized Digital Twin Engine for Type 2 Diabetes"""
 
 from __future__ import annotations
 
@@ -31,16 +20,7 @@ logger = logging.getLogger("glucotwin.digital_twin.engine")
 
 
 class DigitalTwin:
-    """
-    Patient-Specific Digital Twin for Type 2 Diabetes Management.
-
-    Core Capabilities:
-    1. Dynamic State Tracking: Ingests streaming CGM & wearable readings (HR, steps, sleep).
-    2. Multimodal AI Forecasting: Generates 2-hour forward glucose curves using GlucoTwinEnsemble.
-    3. Clinical Risk Assessment: Evaluates acute glycemic risk using international consensus guidelines.
-    4. Proactive Alert Generation: Dispatches spike warnings, hypoglycemia notices, and adherence nudges.
-    5. Counterfactual Simulation: Evaluates 'what-if' interventions (exercise, pharmacotherapy, meals).
-    """
+    """Patient-Specific Digital Twin for Type 2 Diabetes Management."""
 
     def __init__(
         self,
@@ -49,20 +29,7 @@ class DigitalTwin:
         model_ensemble: Optional[GlucoTwinEnsemble] = None,
         feature_store: Optional[Any] = None,
     ):
-        """
-        Initialize the patient's Digital Twin.
-
-        Parameters
-        ----------
-        patient_id : str
-            Unique patient identifier (e.g., 'IND-T2D-001').
-        ehr_data : Dict[str, Any] or pd.Series
-            Patient baseline clinical profile (demographics, HbA1c, BMI, BP, medications, comorbidities).
-        model_ensemble : GlucoTwinEnsemble, optional
-            Trained multimodal AI ensemble (LSTM + XGBoost).
-        feature_store : FeatureStore, optional
-            Feature engineering pipeline and scalers.
-        """
+        """Initialize the patient's Digital Twin."""
         self.patient_id = str(patient_id).upper()
         self.ehr_data = dict(ehr_data) if not isinstance(ehr_data, dict) else ehr_data
         self.model_ensemble = model_ensemble
@@ -82,22 +49,13 @@ class DigitalTwin:
         # Cached predictions
         self._last_prediction: Optional[Dict[str, Any]] = None
 
-    # -------------------------------------------------------------------------
     # State Synchronization
-    # -------------------------------------------------------------------------
 
     def update_state(
         self,
         new_readings: Union[List[Dict[str, Any]], Dict[str, Any], pd.DataFrame],
     ) -> None:
-        """
-        Ingest incoming continuous glucose and wearable telemetry.
-
-        Parameters
-        ----------
-        new_readings : List[Dict], Dict, or pd.DataFrame
-            One or more telemetry samples containing timestamp, glucose, heart_rate, steps, activity.
-        """
+        """Ingest incoming continuous glucose and wearable telemetry."""
         items: List[Dict[str, Any]] = []
         if isinstance(new_readings, pd.DataFrame):
             items = new_readings.to_dict(orient="records")
@@ -153,24 +111,10 @@ class DigitalTwin:
         # Invalidate cached prediction
         self._last_prediction = None
 
-    # -------------------------------------------------------------------------
     # Forward Trajectory Prediction
-    # -------------------------------------------------------------------------
 
     def predict_glucose_trajectory(self, hours_ahead: int = 2) -> List[Dict[str, Any]]:
-        """
-        Generate forward glucose trajectory for the specified horizon (default 2 hours).
-
-        Combines:
-        1. Trained ML ensemble spike probability
-        2. Dynamic kinetic momentum (rate of change)
-        3. Physiological curve synthesis (dawn phenomenon, postprandial decay, basal recovery)
-
-        Returns
-        -------
-        List[Dict[str, Any]]
-            Trajectory points: [{"time": ISO, "glucose": float}].
-        """
+        """Generate forward glucose trajectory for the specified horizon (default 2 hours)."""
         # Assess risk to obtain calibrated spike probability and risk tier
         risk_summary = self.assess_risk()
         spike_prob = risk_summary["spike_probability"]
@@ -212,29 +156,10 @@ class DigitalTwin:
 
         return trajectory
 
-    # -------------------------------------------------------------------------
     # Clinical Risk Assessment
-    # -------------------------------------------------------------------------
 
     def assess_risk(self) -> Dict[str, Any]:
-        """
-        Assess current multi-factorial glycemic risk and spike forecast.
-
-        Returns
-        -------
-        Dict[str, Any]
-            Dict containing:
-            - patient_id
-            - current_glucose
-            - risk_level ('Low', 'Moderate', 'High', 'Critical')
-            - spike_probability (float)
-            - composite_score (float, 0-100)
-            - risk_factors (List[str])
-            - recommended_actions (List[str])
-            - time_to_potential_spike (Optional[int])
-            - confidence (float)
-            - model_attention_weights (List[float])
-        """
+        """Assess current multi-factorial glycemic risk and spike forecast."""
         if self._last_prediction is not None:
             return self._last_prediction
 
@@ -308,26 +233,10 @@ class DigitalTwin:
         self._last_prediction = result
         return result
 
-    # -------------------------------------------------------------------------
     # Active Clinical Alerts
-    # -------------------------------------------------------------------------
 
     def get_alerts(self) -> List[Dict[str, Any]]:
-        """
-        Evaluate active alerts based on current state and upcoming trajectory.
-
-        Alert types:
-        - spike_warning: glucose forecast to cross 180 mg/dL within 2 hours
-        - hypoglycemia: acute low glucose (<70 mg/dL)
-        - rapid_change: velocity > 1.5 mg/dL/min
-        - critical_hyperglycemia: glucose > 250 mg/dL
-        - adherence: persistent elevation requiring medication check
-
-        Returns
-        -------
-        List[Dict[str, Any]]
-            Active alert objects matching AlertResponse schema.
-        """
+        """Evaluate active alerts based on current state and upcoming trajectory."""
         alerts: List[Dict[str, Any]] = []
         now = self.last_updated
         current_bg = self.current_glucose
@@ -390,19 +299,10 @@ class DigitalTwin:
 
         return alerts
 
-    # -------------------------------------------------------------------------
     # Patient Summary Profile
-    # -------------------------------------------------------------------------
 
     def get_patient_summary(self) -> Dict[str, Any]:
-        """
-        Compile full patient profile summary matching API schemas.
-
-        Returns
-        -------
-        Dict[str, Any]
-            Unified demographic, clinical, and digital twin status dictionary.
-        """
+        """Compile full patient profile summary matching API schemas."""
         risk_summary = self.assess_risk()
         summary = dict(self.ehr_data)
 
@@ -417,9 +317,7 @@ class DigitalTwin:
         })
         return summary
 
-    # -------------------------------------------------------------------------
     # Counterfactual Intervention Simulation
-    # -------------------------------------------------------------------------
 
     def simulate_intervention(
         self,
@@ -427,26 +325,7 @@ class DigitalTwin:
         intensity: str = "moderate",
         **kwargs,
     ) -> Dict[str, Any]:
-        """
-        Simulate 'What-If' clinical or lifestyle intervention outcomes.
-
-        Parameters
-        ----------
-        intervention_type : str
-            Type: 'exercise', 'walk', 'take_medication', 'eat_meal', 'drink_water'.
-        intensity : str, default='moderate'
-            Specification: 'light', 'moderate', 'vigorous'.
-
-        Returns
-        -------
-        Dict[str, Any]
-            Dict matching InterventionResponse schema:
-            - baseline_trajectory
-            - intervention_trajectory
-            - expected_improvement
-            - peak_reduction_mg_dl
-            - spike_averted
-        """
+        """Simulate 'What-If' clinical or lifestyle intervention outcomes."""
         baseline_traj = self.predict_glucose_trajectory(hours_ahead=2)
         res = PatientSimulator.generate_counterfactual(
             baseline_trajectory=baseline_traj,

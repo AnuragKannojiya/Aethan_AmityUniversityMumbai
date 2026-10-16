@@ -1,12 +1,4 @@
-"""
-GlucoTwin: Multimodal Data Fusion & Sequence Pipeline
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Fuses static EHR patient profiles with continuous CGM and wearable time-series,
-constructs sliding temporal sequences for deep learning (LSTM/GRU/Transformer),
-and performs patient-level leakage-free train/validation/test partitioning.
-"""
+"""GlucoTwin: Multimodal Data Fusion & Sequence Pipeline"""
 
 from __future__ import annotations
 
@@ -48,19 +40,7 @@ DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 class DataFusion:
-    """
-    Multimodal Data Fusion Engine for GlucoTwin.
-
-    Integrates:
-    - Static EHR attributes (demographics, BMI, HbA1c, comorbidities, medications, lifestyle)
-    - Dynamic CGM & wearable streams (glucose kinetics, circadian features, HRV, activity, sleep)
-
-    Capabilities:
-    - Broadcast join of static patient profiles onto dynamic timesteps.
-    - Leakage-free sliding sequence generation per patient.
-    - Group-based patient partitioning (train / validation / test).
-    - Normalized tensor generation and .npz artifact persistence.
-    """
+    """Multimodal Data Fusion Engine for GlucoTwin."""
 
     def __init__(
         self,
@@ -93,10 +73,7 @@ class DataFusion:
     def load_ehr_features(
         self, path: Optional[Union[str, Path, pd.DataFrame]] = None
     ) -> pd.DataFrame:
-        """
-        Loads EHR records and computes static clinical features.
-        If file does not exist, generates synthetic 200 Indian T2D patient cohort.
-        """
+        """Loads EHR records and computes static clinical features."""
         if isinstance(path, pd.DataFrame):
             raw_ehr = path.copy()
             logger.info(f"Loaded EHR records from provided DataFrame (n={len(raw_ehr)}).")
@@ -123,10 +100,7 @@ class DataFusion:
     def load_cgm_features(
         self, path: Optional[Union[str, Path, pd.DataFrame]] = None
     ) -> pd.DataFrame:
-        """
-        Loads processed CGM and wearable time-series data.
-        If processed file does not exist, triggers the CGMProcessor pipeline.
-        """
+        """Loads processed CGM and wearable time-series data."""
         if isinstance(path, pd.DataFrame):
             self.cgm_df = path.copy()
             logger.info(f"Loaded CGM records from provided DataFrame (n={len(self.cgm_df)}).")
@@ -155,16 +129,7 @@ class DataFusion:
         return self.cgm_df
 
     def merge(self, strategy: str = "broadcast") -> pd.DataFrame:
-        """
-        Merges static EHR features with dynamic CGM time-series.
-        Under the 'broadcast' strategy, each patient's static profile is replicated
-        across their corresponding temporal readings.
-
-        Returns
-        -------
-        pd.DataFrame
-            Merged multimodal dataframe.
-        """
+        """Merges static EHR features with dynamic CGM time-series."""
         if self.ehr_df is None:
             self.load_ehr_features()
         if self.cgm_df is None:
@@ -217,16 +182,7 @@ class DataFusion:
         prediction_horizon: Optional[int] = None,
         stride: Optional[int] = None,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-        """
-        Generates sliding window sequence tensors for multi-input deep learning models:
-        - X_temporal: shape (N, seq_length, n_dynamic_features)
-        - X_static:   shape (N, n_static_features)
-        - y:          shape (N,) binary target (spike within prediction_horizon)
-        - patient_ids: shape (N,) patient identifier strings
-        - timestamps: shape (N,) timestamp at the end of the lookback window
-
-        Sequences are generated strictly within individual patients to prevent cross-patient bleeding.
-        """
+        """Generates sliding window sequence tensors for multi-input deep learning models:"""
         if self.merged_df is None:
             self.merge()
 
@@ -287,27 +243,7 @@ class DataFusion:
         random_state: int = 42,
         stride: Optional[int] = None,
     ) -> Dict[str, Dict[str, Any]]:
-        """
-        Splits data by PATIENT (Group-based partitioning) to avoid data leakage.
-        Ensures temporal sequences from a single patient belong solely to Train,
-        Validation, or Test.
-
-        Parameters
-        ----------
-        test_size : float
-            Fraction of total patients for test set (default: 0.20 = 20%).
-        val_size : float
-            Fraction of total patients for validation set (default: 0.10 = 10%).
-        random_state : int
-            Seed for reproducible cohort assignment.
-        stride : int, optional
-            Step size for sliding window sequence extraction (default: 6 for large datasets, 1 for small).
-
-        Returns
-        -------
-        Dict[str, Dict[str, Any]]
-            Dictionary containing 'train', 'val', 'test' datasets and patient splits.
-        """
+        """Splits data by PATIENT (Group-based partitioning) to avoid data leakage."""
         if self.merged_df is None:
             self.merge()
 
@@ -437,10 +373,7 @@ class DataFusion:
         return self.splits
 
     def save_splits(self, output_dir: Optional[Union[str, Path]] = None) -> Dict[str, Path]:
-        """
-        Saves partitioned datasets as high-performance compressed .npz archives
-        in data/processed/ along with feature names and metadata JSON.
-        """
+        """Saves partitioned datasets as high-performance compressed .npz archives"""
         out_dir = Path(output_dir) if output_dir else self.output_dir
         out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -498,16 +431,7 @@ class DataFusion:
         random_state: int = 42,
         stride: Optional[int] = None,
     ) -> Dict[str, Any]:
-        """
-        Executes the complete multimodal data fusion pipeline:
-        1. Load & engineer static EHR features
-        2. Load & enrich dynamic CGM & wearable telemetry
-        3. Merge static profiles onto time-series grid
-        4. Patient-level split into train/val/test
-        5. Fit scalers on train set and generate sequence tensors
-        6. Persist .npz files and feature metadata
-        7. Return comprehensive diagnostic summary
-        """
+        """Executes the complete multimodal data fusion pipeline:"""
         logger.info("Starting complete GlucoTwin multimodal fusion pipeline...")
         self.load_ehr_features()
         self.load_cgm_features()

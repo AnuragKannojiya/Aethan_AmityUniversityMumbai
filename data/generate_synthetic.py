@@ -1,21 +1,4 @@
-"""
-GlucoTwin Synthetic Data Generation System
-==========================================
-
-Master data generation script for GlucoTwin — a Digital Twin proof-of-concept
-for Type 2 Diabetes glucose spike prediction (Digital Twin Challenge 2026).
-Simulates 200 synthetic Type 2 Diabetes patients from India with realistic
-demographics, clinical correlations, and 30-day continuous CGM/wearable telemetry.
-
-Target Output Files:
-    - data/raw/ehr_patients.csv: Static EHR records for 200 patients
-    - data/raw/medications_schedule.csv: Per-patient medication regimen and adherence
-    - data/raw/cgm_readings.csv: 5-minute interval continuous monitoring for 30 days
-                                 (8,640 readings/patient = 1,728,000 records)
-    - data/raw/glucose_events.csv: Identified spike, hypoglycemia, and rapid drop events
-
-Team: Aethan, Amity University Mumbai
-"""
+"""GlucoTwin Synthetic Data Generation System"""
 
 import sys
 import os
@@ -37,9 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
 DEFAULT_RAW_DIR = PROJECT_ROOT / "data" / "raw"
 
 
-# ==============================================================================
 # DEMOGRAPHIC POOLS (REALISTIC INDIAN NAMES & CITIES)
-# ==============================================================================
 
 MALE_FIRST_NAMES = [
     "Rajesh", "Amit", "Suresh", "Vijay", "Anil", "Ramesh", "Vikram", "Manoj",
@@ -72,30 +53,10 @@ INDIAN_CITIES = [
 ]
 
 
-# ==============================================================================
 # 1. EHR DATA GENERATION (STATIC / HISTORICAL)
-# ==============================================================================
 
 def generate_ehr_data(n_patients: int = 200, seed: int = 42) -> pd.DataFrame:
-    """
-    Generate realistic static EHR records for Type 2 Diabetes patients in India.
-    
-    Clinical Features & Plausibility:
-    - Age: 35-75, skewed towards typical Indian T2D onset (45-65)
-    - BMI: 22-42, Asian Indian overweight/obesity criteria
-    - HbA1c: 5.5 - 12.0 %, stratified into well-controlled, moderate, high, and critical
-    - Fasting glucose: 100 - 300 mg/dL, clinically correlated with HbA1c (eAG)
-    - Lipids: High Triglycerides, low HDL (classic Asian Indian dyslipidemia)
-    - Blood pressure & Renal panel: Correlated with age, BMI, and diabetes duration
-    - Comorbidities & Medications: Assigned according to clinical progression guidelines
-
-    Args:
-        n_patients: Number of patient records to generate (default: 200).
-        seed: Random seed for deterministic reproducibility.
-
-    Returns:
-        pd.DataFrame: Tabular EHR records for n_patients.
-    """
+    """Generate realistic static EHR records for Type 2 Diabetes patients in India."""
     rng = np.random.default_rng(seed)
     ref_date = datetime(2026, 1, 1)
     patient_records = []
@@ -251,59 +212,6 @@ def generate_ehr_data(n_patients: int = 200, seed: int = 42) -> pd.DataFrame:
         last_visit_days = int(rng.integers(5, 120))
         last_visit_date = (ref_date - timedelta(days=last_visit_days)).strftime("%Y-%m-%d")
 
-        # ---------------------------------------------------------------
-        # GENETIC MARKERS (T2D-associated SNPs prevalent in South Asians)
-        # ---------------------------------------------------------------
-        # TCF7L2 rs7903146: Strongest T2D risk locus worldwide.
-        #   Genotypes: CC (wild-type), CT (heterozygous risk), TT (homozygous risk)
-        #   Risk allele 'T' frequency ~30% in South Asians; higher in T2D patients.
-        tcf7l2_probs = {0: [0.55, 0.35, 0.10], 1: [0.40, 0.42, 0.18],
-                        2: [0.28, 0.44, 0.28], 3: [0.18, 0.40, 0.42]}
-        tcf7l2 = rng.choice(["CC", "CT", "TT"], p=tcf7l2_probs[tier])
-
-        # PPARG rs1801282 (Pro12Ala): Protective variant for insulin sensitivity.
-        #   CG/GG = protective; CC = risk (wild-type).
-        pparg_probs = {0: [0.70, 0.25, 0.05], 1: [0.78, 0.18, 0.04],
-                       2: [0.85, 0.13, 0.02], 3: [0.90, 0.09, 0.01]}
-        pparg = rng.choice(["CC", "CG", "GG"], p=pparg_probs[tier])
-
-        # KCNJ11 rs5219 (E23K): Affects beta-cell potassium channel function.
-        #   TT = risk; CC = wild-type.
-        kcnj11_probs = {0: [0.50, 0.38, 0.12], 1: [0.38, 0.42, 0.20],
-                        2: [0.28, 0.42, 0.30], 3: [0.20, 0.38, 0.42]}
-        kcnj11 = rng.choice(["CC", "CT", "TT"], p=kcnj11_probs[tier])
-
-        # SLC30A8 rs13266634: Zinc transporter in beta-cells.
-        #   CC = risk; TT = protective.
-        slc30a8_probs = {0: [0.22, 0.48, 0.30], 1: [0.32, 0.45, 0.23],
-                         2: [0.42, 0.40, 0.18], 3: [0.55, 0.33, 0.12]}
-        slc30a8 = rng.choice(["CC", "CT", "TT"], p=slc30a8_probs[tier])
-
-        # FTO rs9939609: Obesity/T2D risk, affects appetite regulation.
-        #   AA = risk; TT = wild-type. Higher in obese patients.
-        fto_base = {0: [0.50, 0.38, 0.12], 1: [0.40, 0.40, 0.20],
-                    2: [0.30, 0.40, 0.30], 3: [0.22, 0.38, 0.40]}
-        fto = rng.choice(["TT", "TA", "AA"], p=fto_base[tier])
-
-        # HLA-DQ risk haplotype: Associated with autoimmune T1D but also
-        # contributes to latent autoimmune diabetes in adults (LADA) risk.
-        #   Present/Absent, ~8-15% prevalence.
-        hla_dq_risk = bool(rng.random() < (0.06 + 0.03 * tier))
-
-        # Composite polygenic risk score (0.0 - 1.0)
-        # Weights based on published GWAS effect sizes for South Asians
-        risk_allele_count = (
-            (1 if tcf7l2 == "CT" else 2 if tcf7l2 == "TT" else 0) * 1.40 +  # OR 1.40 per T allele
-            (0 if pparg in ["CG", "GG"] else 1) * 0.80 +  # Protective absence
-            (1 if kcnj11 == "CT" else 2 if kcnj11 == "TT" else 0) * 1.15 +
-            (1 if slc30a8 == "CT" else 2 if slc30a8 == "CC" else 0) * 1.12 +
-            (1 if fto == "TA" else 2 if fto == "AA" else 0) * 1.10 +
-            (1.5 if hla_dq_risk else 0.0) +
-            (1.0 if fam_history else 0.0)
-        )
-        max_score = (2 * 1.40 + 0.80 + 2 * 1.15 + 2 * 1.12 + 2 * 1.10 + 1.5 + 1.0)
-        genetic_risk_score = round(float(risk_allele_count / max_score), 3)
-
         patient_records.append({
             "patient_id": pid,
             "name": full_name,
@@ -333,36 +241,16 @@ def generate_ehr_data(n_patients: int = 200, seed: int = 42) -> pd.DataFrame:
             "stress_level": stress_level,
             "sleep_hours_avg": sleep_hours_avg,
             "diagnosis_date": diagnosis_date,
-            "last_visit_date": last_visit_date,
-            # Genetic Markers (T2D-associated SNPs)
-            "tcf7l2_rs7903146": tcf7l2,
-            "pparg_rs1801282": pparg,
-            "kcnj11_rs5219": kcnj11,
-            "slc30a8_rs13266634": slc30a8,
-            "fto_rs9939609": fto,
-            "hla_dq_risk": hla_dq_risk,
-            "genetic_risk_score": genetic_risk_score,
+            "last_visit_date": last_visit_date
         })
 
     return pd.DataFrame(patient_records)
 
 
-# ==============================================================================
 # 2. MEDICATIONS SCHEDULE GENERATION
-# ==============================================================================
 
 def generate_medications_schedule(ehr_df: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
-    """
-    Generate detailed per-patient medication dosing schedules with frequencies,
-    standardized timings, and realistic adherence rates.
-
-    Args:
-        ehr_df: Static EHR records containing 'patient_id' and 'medication'.
-        seed: Random seed for reproducibility.
-
-    Returns:
-        pd.DataFrame: Tabular medication schedules for each patient.
-    """
+    """Generate detailed per-patient medication dosing schedules with frequencies,"""
     rng = np.random.default_rng(seed)
     schedules = []
 
@@ -423,38 +311,14 @@ def generate_medications_schedule(ehr_df: pd.DataFrame, seed: int = 42) -> pd.Da
     return pd.DataFrame(schedules)
 
 
-# ==============================================================================
 # 3. WEARABLE / CGM TIME-SERIES & EVENT GENERATION
-# ==============================================================================
 
 def simulate_patient_cgm(
     patient_row: pd.Series,
     days: int = 30,
     seed: int = 42
 ) -> Tuple[pd.DataFrame, List[Dict]]:
-    """
-    Vectorized high-performance simulation of 5-minute continuous glucose and
-    wearable telemetry for a single patient over the specified number of days.
-
-    Key Physiological Features:
-        - Postprandial spikes for Indian meals (breakfast ~08:15, lunch ~13:15,
-          evening tea/snack ~17:15, dinner ~20:30)
-        - Dawn phenomenon (04:00 - 08:30 glucose rise)
-        - Exercise-induced glucose reductions and heart rate surges
-        - 90-minute sleep cycling (Light, Deep, REM, Awake) and nocturnal stability
-        - AR(1) colored autoregressive noise to mimic continuous interstitial sensor dynamics
-        - Dangerous spikes (>250 mg/dL) for poorly controlled patients
-
-    Args:
-        patient_row: Series containing patient EHR attributes.
-        days: Number of days to simulate (default: 30 days = 8,640 steps).
-        seed: Random seed for reproducibility.
-
-    Returns:
-        Tuple[pd.DataFrame, List[Dict]]:
-            - DataFrame with CGM and wearable columns
-            - List of event records for spike/hypoglycemia/drop events
-    """
+    """Vectorized high-performance simulation of 5-minute continuous glucose and"""
     rng = np.random.default_rng(seed)
 
     pid = patient_row["patient_id"]
@@ -681,25 +545,11 @@ def simulate_patient_cgm(
     # Final glucose values bounded strictly to [40.0, 400.0]
     final_glucose = np.round(np.clip(raw_glucose, 40.0, 400.0), 1)
 
-    # Heart Rate Variability (HRV RMSSD in ms):
-    # Inversely correlated with heart rate, stress, and hyperglycemia; elevated during deep sleep
-    hrv_base = 48.0 - 2.2 * max(0.0, hba1c - 6.0) - 0.25 * max(0.0, float(patient_row["age"]) - 40.0)
-    hrv_raw = (
-        hrv_base
-        - 0.32 * (heart_rate - hr_base)
-        - 0.18 * stress_idx
-        + np.where(deep_mask, 12.0, 0.0)
-        + np.where(high_g_mask, -6.5, 0.0)
-        + rng.normal(0, 3.2, total_steps)
-    )
-    hrv_rmssd_ms = np.round(np.clip(hrv_raw, 12.0, 95.0), 1)
-
     cgm_df = pd.DataFrame({
         "patient_id": pid,
         "timestamp": time_grid.strftime("%Y-%m-%d %H:%M:%S"),
         "glucose_mg_dl": final_glucose,
         "heart_rate_bpm": heart_rate,
-        "hrv_rmssd_ms": hrv_rmssd_ms,
         "steps_last_5min": steps_5m,
         "sleep_stage": sleep_stage,
         "skin_temperature_c": skin_temp,
@@ -718,20 +568,7 @@ def extract_patient_events(
     time_grid: pd.DatetimeIndex,
     glucose: np.ndarray
 ) -> List[Dict]:
-    """
-    Scan continuous CGM data to extract clinically significant glycemic events:
-    - Spikes: episodes where glucose > 180 mg/dL (mild: 180-215, moderate: 215-250, severe: >250)
-    - Hypoglycemia: episodes where glucose < 70 mg/dL (mild: 60-70, moderate: 54-60, severe: <54)
-    - Rapid Drops: episodes with drops > 40 mg/dL within 30-45 minutes
-
-    Args:
-        patient_id: Patient identifier.
-        time_grid: Datetime index of readings.
-        glucose: Array of continuous glucose readings.
-
-    Returns:
-        List[Dict]: List of detected event dictionaries.
-    """
+    """Scan continuous CGM data to extract clinically significant glycemic events:"""
     events = []
     n = len(glucose)
     i = 0
@@ -837,9 +674,7 @@ def extract_patient_events(
     return events
 
 
-# ==============================================================================
 # 4. MASTER PIPELINE EXECUTION
-# ==============================================================================
 
 def generate_all_data(
     n_patients: int = 200,
@@ -847,22 +682,7 @@ def generate_all_data(
     output_dir: Optional[Union[str, Path]] = None,
     seed: int = 42
 ) -> Dict[str, Union[pd.DataFrame, Path]]:
-    """
-    Generate the complete synthetic dataset for GlucoTwin:
-        1. data/raw/ehr_patients.csv
-        2. data/raw/medications_schedule.csv
-        3. data/raw/cgm_readings.csv
-        4. data/raw/glucose_events.csv
-
-    Args:
-        n_patients: Number of patient records to generate (default: 200).
-        days: Days of continuous telemetry per patient (default: 30).
-        output_dir: Target output directory (default: data/raw).
-        seed: Random seed for deterministic reproducibility.
-
-    Returns:
-        Dict: Paths and loaded dataframes.
-    """
+    """Generate the complete synthetic dataset for GlucoTwin:"""
     start_time = time.time()
     out_path = Path(output_dir) if output_dir else DEFAULT_RAW_DIR
     out_path.mkdir(parents=True, exist_ok=True)

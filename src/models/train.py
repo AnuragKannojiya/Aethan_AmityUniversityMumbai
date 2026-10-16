@@ -1,17 +1,4 @@
-"""
-GlucoTwin: End-to-End Model Training & Evaluation Pipeline
-==========================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Trains both the PyTorch multimodal LSTM and XGBoost models on processed T2D cohorts,
-constructs the calibrated GlucoTwin ensemble, evaluates performance across clinical
-metrics (ROC-AUC, PR-AUC, Sensitivity, Specificity, Brier Score), and persists artifacts.
-
-Usage:
-------
-    python -m src.models.train
-"""
+"""GlucoTwin: End-to-End Model Training & Evaluation Pipeline"""
 
 from __future__ import annotations
 
@@ -100,9 +87,7 @@ def load_dataset(data_dir: Path) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[s
     return train_data, val_data, test_data, metadata
 
 
-# -----------------------------------------------------------------------------
 # LSTM Training Loop
-# -----------------------------------------------------------------------------
 
 
 def train_lstm(
@@ -115,10 +100,7 @@ def train_lstm(
     patience: int = 4,
     max_train_samples: Optional[int] = None,
 ) -> GlucoseLSTM:
-    """
-    Train GlucoseLSTM model with Adam optimizer, Cosine Annealing,
-    imbalance class weighting, and early stopping.
-    """
+    """Train GlucoseLSTM model with Adam optimizer, Cosine Annealing,"""
     logger.info("=" * 70)
     logger.info("TRAINING PYTORCH GLUCOSE-LSTM WITH TEMPORAL ATTENTION")
     logger.info("=" * 70)
@@ -266,9 +248,7 @@ def train_lstm(
     return model
 
 
-# -----------------------------------------------------------------------------
 # XGBoost Training Loop
-# -----------------------------------------------------------------------------
 
 
 def train_xgboost(
@@ -277,10 +257,7 @@ def train_xgboost(
     metadata: Dict[str, Any],
     max_train_samples: Optional[int] = 80000,
 ) -> GlucoseXGBoost:
-    """
-    Train GlucoseXGBoost model with rolling summary statistics,
-    class weighting, and histogram tree learning.
-    """
+    """Train GlucoseXGBoost model with rolling summary statistics,"""
     logger.info("=" * 70)
     logger.info("TRAINING GLUCOSE-XGBOOST CLASSIFIER")
     logger.info("=" * 70)
@@ -345,9 +322,7 @@ def train_xgboost(
     return xgb_model
 
 
-# -----------------------------------------------------------------------------
 # Evaluation
-# -----------------------------------------------------------------------------
 
 
 def evaluate_model(y_true: np.ndarray, y_prob: np.ndarray, threshold: float = 0.5) -> Dict[str, Any]:
@@ -378,9 +353,7 @@ def evaluate_model(y_true: np.ndarray, y_prob: np.ndarray, threshold: float = 0.
     return metrics
 
 
-# -----------------------------------------------------------------------------
 # Main Pipeline
-# -----------------------------------------------------------------------------
 
 
 def run_training_pipeline(

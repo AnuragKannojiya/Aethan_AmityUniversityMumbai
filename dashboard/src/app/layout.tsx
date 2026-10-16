@@ -9,19 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'GlucoTwin | Digital Twin Dashboard',
-  description:
-    'Real-time physiological digital twin forecasting glucose excursions 2 hours in advance using multimodal EHR and wearable CGM telemetry.',
-  keywords: [
-    'Digital Twin',
-    'Type 2 Diabetes',
-    'Glucose Spike Prediction',
-    'Continuous Glucose Monitor',
-    'Clinical Decision Support',
-    'Amity University Mumbai',
-    'Team Aethan'
-  ],
-  authors: [{ name: 'Team Aethan - Amity University Mumbai' }],
+  title: 'GlucoTwin — Clinical Dashboard',
+  description: 'Digital Twin for 2-Hour Glucose Spike Prediction in Type 2 Diabetes',
 };
 
 export default function RootLayout({
@@ -30,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} dark`}>
-      <body className="min-h-screen bg-[#0a0e1a] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
+    <html lang="en" className={inter.variable}>
+      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
         {children}
       </body>
     </html>

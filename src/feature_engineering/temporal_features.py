@@ -1,11 +1,4 @@
-"""
-GlucoTwin: Temporal CGM & Wearable Feature Engineering Module
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Extracts multi-scale dynamic temporal features, circadian rhythms,
-glycemic momentum, volatility indexes, and autonomic recovery indicators.
-"""
+"""GlucoTwin: Temporal CGM & Wearable Feature Engineering Module"""
 
 from __future__ import annotations
 
@@ -36,20 +29,7 @@ def _estimate_meal_events(
     steps_col: str = "steps",
     window_steps: int = 6,
 ) -> pd.Series:
-    """
-    Estimates post-prandial meal events from physiological glucose excursion patterns
-    when explicit meal logging is absent or incomplete.
-
-    A meal event is detected when:
-    1. Rapid glucose rise: >= 20 mg/dL within 30 minutes (6 readings).
-    2. Positive rate of change and positive acceleration.
-    3. Occurring during typical Indian meal windows:
-       - Breakfast: 07:30 - 10:30
-       - Lunch: 12:30 - 15:30
-       - Evening snack / Chai: 17:00 - 18:30
-       - Dinner: 19:30 - 22:45
-    4. Not solely attributable to intense anaerobic exercise (steps < 600 in window).
-    """
+    """Estimates post-prandial meal events from physiological glucose excursion patterns"""
     glucose = patient_df[glucose_col]
     steps = patient_df[steps_col] if steps_col in patient_df.columns else pd.Series(0, index=patient_df.index)
     ts = pd.to_datetime(patient_df["timestamp"])
@@ -95,10 +75,7 @@ def _estimate_meal_events(
 
 
 def _compute_patient_temporal_features(group: pd.DataFrame) -> pd.DataFrame:
-    """
-    Computes all temporal features for a single patient time-series.
-    Operates strictly within a single patient group to prevent data leakage.
-    """
+    """Computes all temporal features for a single patient time-series."""
     df = group.sort_values("timestamp").copy()
     ts = pd.to_datetime(df["timestamp"])
 
@@ -298,32 +275,7 @@ def _compute_patient_temporal_features(group: pd.DataFrame) -> pd.DataFrame:
 
 
 def extract_temporal_features(cgm_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Extracts and engineers temporal dynamic features from continuous glucose
-    monitoring and wearable sensor data.
-
-    Features include:
-    - Diurnal circadian representations (sin_time_of_day, cos_time_of_day)
-    - Day of week cyclical features (sin_day_of_week, cos_day_of_week, is_weekend)
-    - Physiological meal proximity & estimated postprandial timelines
-    - Fast/slow exponential glycemic momentum & MACD-style momentum divergence
-    - Custom Glucose Volatility Index (GVI) and Mean Absolute Glucose rate (MAG)
-    - Post-prandial glycemic excursion magnitude and baseline ratio
-    - Nocturnal baselines, dawn phenomenon indicators, and nocturnal hypo risks
-    - Autonomic cardiac recovery index (HRR) and hourly SDNN variability
-    - Step count velocity and activity trends over 2 hours
-    - Multi-scale sliding statistics (5m, 15m, 30m, 1h, 2h rolling distributions)
-
-    Parameters
-    ----------
-    cgm_df : pd.DataFrame
-        Continuous time-series sensor records containing patient_id, timestamp, glucose, etc.
-
-    Returns
-    -------
-    pd.DataFrame
-        Enriched DataFrame with all temporal and wearable features computed per patient.
-    """
+    """Extracts and engineers temporal dynamic features from continuous glucose"""
     df = cgm_df.copy()
 
     # Identify patient identifier

@@ -1,7 +1,4 @@
-"""
-Unit and Integration Tests for GlucoTwin Data Generation & EHR Pipeline
-=======================================================================
-"""
+"""Unit and Integration Tests for GlucoTwin Data Generation & EHR Pipeline"""
 
 import sys
 import unittest
@@ -47,9 +44,7 @@ class TestSyntheticDataGeneration(unittest.TestCase):
             "triglycerides", "creatinine", "egfr", "diabetes_duration_years",
             "medication", "comorbidities", "family_history_diabetes",
             "smoking_status", "physical_activity_level", "diet_type",
-            "stress_level", "sleep_hours_avg", "diagnosis_date", "last_visit_date",
-            "tcf7l2_rs7903146", "pparg_rs1801282", "kcnj11_rs5219",
-            "slc30a8_rs13266634", "fto_rs9939609", "hla_dq_risk", "genetic_risk_score"
+            "stress_level", "sleep_hours_avg", "diagnosis_date", "last_visit_date"
         ]
         self.assertEqual(len(self.ehr_df), 10)
         for col in expected_cols:
@@ -85,7 +80,7 @@ class TestSyntheticDataGeneration(unittest.TestCase):
         
         required_cols = [
             "patient_id", "timestamp", "glucose_mg_dl", "heart_rate_bpm",
-            "hrv_rmssd_ms", "steps_last_5min", "sleep_stage", "skin_temperature_c",
+            "steps_last_5min", "sleep_stage", "skin_temperature_c",
             "stress_index", "activity_type"
         ]
         for col in required_cols:

@@ -2,54 +2,54 @@
   "evaluation_cohort_size": 57480,
   "test_spike_ratio_pct": 67.94,
   "lstm_model": {
-    "accuracy": 0.9374,
-    "balanced_accuracy": 0.9413,
-    "roc_auc": 0.989,
-    "pr_auc": 0.9949,
-    "precision": 0.9763,
-    "recall_sensitivity": 0.9304,
-    "specificity": 0.9521,
+    "accuracy": 0.9375,
+    "balanced_accuracy": 0.9428,
+    "roc_auc": 0.9895,
+    "pr_auc": 0.9951,
+    "precision": 0.9789,
+    "recall_sensitivity": 0.928,
+    "specificity": 0.9577,
     "f1_score": 0.9528,
-    "brier_score": 0.0439,
+    "brier_score": 0.0443,
     "confusion_matrix": {
-      "tp": 36331,
-      "fp": 882,
-      "tn": 17548,
-      "fn": 2719
+      "tp": 36238,
+      "fp": 780,
+      "tn": 17650,
+      "fn": 2812
     }
   },
   "xgboost_model": {
-    "accuracy": 0.9565,
-    "balanced_accuracy": 0.957,
-    "roc_auc": 0.9939,
-    "pr_auc": 0.9972,
-    "precision": 0.9799,
-    "recall_sensitivity": 0.9556,
-    "specificity": 0.9584,
-    "f1_score": 0.9676,
-    "brier_score": 0.0307,
+    "accuracy": 0.9563,
+    "balanced_accuracy": 0.9563,
+    "roc_auc": 0.9937,
+    "pr_auc": 0.9971,
+    "precision": 0.9789,
+    "recall_sensitivity": 0.9563,
+    "specificity": 0.9563,
+    "f1_score": 0.9675,
+    "brier_score": 0.031,
     "confusion_matrix": {
-      "tp": 37316,
-      "fp": 767,
-      "tn": 17663,
-      "fn": 1734
+      "tp": 37345,
+      "fp": 805,
+      "tn": 17625,
+      "fn": 1705
     }
   },
   "glucotwin_ensemble": {
-    "accuracy": 0.9516,
+    "accuracy": 0.9507,
     "balanced_accuracy": 0.9535,
     "roc_auc": 0.9925,
     "pr_auc": 0.9965,
-    "precision": 0.9799,
-    "recall_sensitivity": 0.9481,
-    "specificity": 0.9589,
-    "f1_score": 0.9638,
-    "brier_score": 0.0353,
+    "precision": 0.9812,
+    "recall_sensitivity": 0.9455,
+    "specificity": 0.9616,
+    "f1_score": 0.963,
+    "brier_score": 0.0357,
     "confusion_matrix": {
-      "tp": 37025,
-      "fp": 758,
-      "tn": 17672,
-      "fn": 2025
+      "tp": 36922,
+      "fp": 708,
+      "tn": 17722,
+      "fn": 2128
     }
   }
 }

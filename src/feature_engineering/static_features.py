@@ -1,11 +1,4 @@
-"""
-GlucoTwin: Static EHR Feature Engineering Module
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Extracts clinically grounded, demographic, metabolic, and lifestyle static features
-from Electronic Health Record (EHR) data tailored to Indian Type 2 Diabetes phenotypes.
-"""
+"""GlucoTwin: Static EHR Feature Engineering Module"""
 
 from __future__ import annotations
 
@@ -34,9 +27,7 @@ DATA_RAW_DIR = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 
-# -------------------------------------------------------------------------
 # Clinical Reference Standards for Indian Type 2 Diabetes Cohorts
-# -------------------------------------------------------------------------
 # Asian Indian BMI cutoffs per ICMR and Consensus Guidelines (Misra et al., 2009):
 # Underweight: < 18.5 kg/m2
 # Normal: 18.5 - 22.9 kg/m2
@@ -77,10 +68,7 @@ def _classify_age_group(age: float) -> Tuple[str, int]:
 
 
 def _classify_bmi(bmi: float) -> Tuple[str, int]:
-    """
-    Classifies BMI according to Asian-Indian specific criteria (ICMR guidelines).
-    Returns (category_name, ordinal_code).
-    """
+    """Classifies BMI according to Asian-Indian specific criteria (ICMR guidelines)."""
     if pd.isna(bmi) or bmi <= 0:
         return ("Normal", 1)
     bmi_val = float(bmi)
@@ -99,14 +87,7 @@ def _classify_bmi(bmi: float) -> Tuple[str, int]:
 
 
 def _classify_hba1c(hba1c: float) -> Tuple[str, int]:
-    """
-    Classifies HbA1c into clinical glycemic control tiers:
-    - Well-controlled: < 7.0%
-    - Moderate: 7.0 - 9.0%
-    - Poorly-controlled: 9.0 - 11.0%
-    - Critical: > 11.0%
-    Returns (tier_name, ordinal_code).
-    """
+    """Classifies HbA1c into clinical glycemic control tiers:"""
     if pd.isna(hba1c) or hba1c <= 0:
         return ("Moderate", 1)
     val = float(hba1c)
@@ -121,13 +102,7 @@ def _classify_hba1c(hba1c: float) -> Tuple[str, int]:
 
 
 def _classify_diabetes_duration(years: float) -> Tuple[str, int]:
-    """
-    Classifies diabetes duration risk:
-    - New: < 2 years
-    - Established: 2 - 10 years
-    - Long-standing: > 10 years
-    Returns (tier_name, ordinal_code).
-    """
+    """Classifies diabetes duration risk:"""
     if pd.isna(years) or years < 0:
         return ("Established", 1)
     val = float(years)
@@ -140,16 +115,7 @@ def _classify_diabetes_duration(years: float) -> Tuple[str, int]:
 
 
 def _classify_egfr(egfr: float) -> Tuple[str, int]:
-    """
-    Classifies estimated Glomerular Filtration Rate (KDIGO CKD Staging):
-    - G1: >= 90 (Normal or high)
-    - G2: 60 - 89 (Mildly decreased)
-    - G3a: 45 - 59 (Mild-to-moderately decreased)
-    - G3b: 30 - 44 (Moderately-to-severely decreased)
-    - G4: 15 - 29 (Severely decreased)
-    - G5: < 15 (Kidney failure)
-    Returns (stage_name, ordinal_code).
-    """
+    """Classifies estimated Glomerular Filtration Rate (KDIGO CKD Staging):"""
     if pd.isna(egfr) or egfr <= 0:
         return ("G1", 0)
     val = float(egfr)
@@ -168,10 +134,7 @@ def _classify_egfr(egfr: float) -> Tuple[str, int]:
 
 
 def _parse_comorbidities(val: Union[List, str, None]) -> Tuple[int, float, Dict[str, int]]:
-    """
-    Parses comorbidity entries from list or string, computing total count,
-    severity weighted score, and individual binary flags.
-    """
+    """Parses comorbidity entries from list or string, computing total count,"""
     flags = {
         "has_hypertension": 0,
         "has_dyslipidemia": 0,
@@ -241,10 +204,7 @@ def _parse_comorbidities(val: Union[List, str, None]) -> Tuple[int, float, Dict[
 
 
 def _parse_medications(val: Union[List, str, None]) -> Tuple[int, float, Dict[str, int]]:
-    """
-    Parses medications list or string, computing drug count,
-    complexity score, and specific pharmaceutical class flags.
-    """
+    """Parses medications list or string, computing drug count,"""
     flags = {
         "uses_insulin": 0,
         "uses_metformin": 0,
@@ -305,13 +265,7 @@ def _compute_lifestyle_score(
     stress_level: float,
     weight_kg: float = 70.0,
 ) -> float:
-    """
-    Computes a composite lifestyle score on a 0 to 100 scale:
-    - Activity: up to 25 pts
-    - Diet & Protein adequacy: up to 25 pts
-    - Sleep duration: up to 25 pts
-    - Stress index: up to 25 pts
-    """
+    """Computes a composite lifestyle score on a 0 to 100 scale:"""
     # 1. Activity score (0-25)
     act_map = {
         "sedentary": 5.0,
@@ -357,10 +311,7 @@ def _compute_cv_risk_composite(
     triglycerides: float,
     has_cad: int,
 ) -> float:
-    """
-    Calculates a cardiovascular composite risk score (0 to 100):
-    Incorporates blood pressure, atherogenic lipid ratios (TG/HDL), and history.
-    """
+    """Calculates a cardiovascular composite risk score (0 to 100):"""
     score = 0.0
 
     # Systolic blood pressure
@@ -416,34 +367,7 @@ def _compute_cv_risk_composite(
 
 
 def extract_static_features(ehr_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Extracts and engineers static patient features from raw or processed EHR data.
-
-    Engineered Features:
-    - Age group buckets ('35-45', '45-55', '55-65', '65+') and ordinal encoding
-    - BMI category (Asian Indian cutoffs: Normal/Overweight/Obese_I/Obese_II/Obese_III)
-    - HbA1c risk tier (Well-controlled <7, Moderate 7-9, Poorly-controlled 9-11, Critical >11)
-    - Diabetes duration risk (New <2y, Established 2-10y, Long-standing >10y)
-    - Comorbidity count, weighted severity score, and specific condition flags
-    - Medication complexity score, drug count, and pharmacological class indicators
-    - Lifestyle composite score (0-100 combining physical activity, diet, sleep, stress)
-    - eGFR stage (G1-G5 KDIGO classification)
-    - Cardiovascular risk composite (blood pressure, lipid profiles, TG/HDL ratio)
-    - Indian-specific risk factors:
-      * Vegetarian diet interaction with daily protein intake (carb-protein imbalance)
-      * South Asian thin-fat metabolic phenotype score
-      * Urban metropolitan stress index
-
-    Parameters
-    ----------
-    ehr_df : pd.DataFrame
-        DataFrame containing patient EHR attributes. Supports standard and varied column names.
-
-    Returns
-    -------
-    pd.DataFrame
-        Rich static feature dataframe indexed by patient_id with all clinical scores.
-    """
+    """Extracts and engineers static patient features from raw or processed EHR data."""
     df = ehr_df.copy()
 
     # Standardize patient identifier column
@@ -636,40 +560,6 @@ def extract_static_features(ehr_df: pd.DataFrame) -> pd.DataFrame:
     is_metro = city_s.str.lower().str.contains("mumbai|delhi|bengaluru|bangalore|hyderabad|pune").astype(int)
     features["urban_stress_index"] = (is_metro * (stress_s / 10.0)).round(2)
 
-    # 11. Genetic Markers & Polygenic Risk Score (South Asian T2D GWAS loci)
-    tcf_s = df["tcf7l2_rs7903146"].astype(str).str.upper() if "tcf7l2_rs7903146" in df.columns else pd.Series(["CT"] * n, index=df.index)
-    features["tcf7l2_risk_alleles"] = tcf_s.map({"CC": 0, "CT": 1, "TT": 2}).fillna(1).astype(int)
-
-    pparg_s = df["pparg_rs1801282"].astype(str).str.upper() if "pparg_rs1801282" in df.columns else pd.Series(["CC"] * n, index=df.index)
-    features["pparg_protective"] = pparg_s.isin(["CG", "GG"]).astype(int)
-
-    kcnj_s = df["kcnj11_rs5219"].astype(str).str.upper() if "kcnj11_rs5219" in df.columns else pd.Series(["CT"] * n, index=df.index)
-    features["kcnj11_risk_alleles"] = kcnj_s.map({"CC": 0, "CT": 1, "TT": 2}).fillna(1).astype(int)
-
-    slc_s = df["slc30a8_rs13266634"].astype(str).str.upper() if "slc30a8_rs13266634" in df.columns else pd.Series(["CT"] * n, index=df.index)
-    features["slc30a8_risk_alleles"] = slc_s.map({"TT": 0, "CT": 1, "CC": 2}).fillna(1).astype(int)
-
-    fto_s = df["fto_rs9939609"].astype(str).str.upper() if "fto_rs9939609" in df.columns else pd.Series(["TA"] * n, index=df.index)
-    features["fto_risk_alleles"] = fto_s.map({"TT": 0, "TA": 1, "AA": 2}).fillna(1).astype(int)
-
-    if "hla_dq_risk" in df.columns:
-        features["hla_dq_risk_flag"] = df["hla_dq_risk"].map(lambda x: 1 if str(x).lower() in ["true", "1", "yes"] else 0).astype(int)
-    else:
-        features["hla_dq_risk_flag"] = 0
-
-    if "genetic_risk_score" in df.columns:
-        features["genetic_risk_score"] = pd.to_numeric(df["genetic_risk_score"], errors="coerce").fillna(0.42).clip(0.0, 1.0).round(3)
-    else:
-        raw_prs = (
-            features["tcf7l2_risk_alleles"] * 1.40
-            + (1 - features["pparg_protective"]) * 0.80
-            + features["kcnj11_risk_alleles"] * 1.15
-            + features["slc30a8_risk_alleles"] * 1.12
-            + features["fto_risk_alleles"] * 1.10
-            + features["hla_dq_risk_flag"] * 1.50
-        ) / 11.84
-        features["genetic_risk_score"] = raw_prs.clip(0.0, 1.0).round(3)
-
     logger.info(
         f"Extracted {features.shape[1]} static EHR features for {len(features)} patients."
     )
@@ -677,22 +567,7 @@ def extract_static_features(ehr_df: pd.DataFrame) -> pd.DataFrame:
 
 
 def generate_synthetic_ehr_cohort(num_patients: int = 200, seed: int = 42) -> pd.DataFrame:
-    """
-    Generates a highly realistic synthetic EHR dataset of Indian Type 2 Diabetes patients.
-    Reflects epidemiological patterns observed in urban and semi-urban Indian populations.
-
-    Parameters
-    ----------
-    num_patients : int
-        Number of patient records to synthesize (default: 200).
-    seed : int
-        Random seed for reproducibility.
-
-    Returns
-    -------
-    pd.DataFrame
-        Complete EHR records matching clinical trial demographic parameters.
-    """
+    """Generates a highly realistic synthetic EHR dataset of Indian Type 2 Diabetes patients."""
     np.random.seed(seed)
 
     indian_first_names_m = [
@@ -814,14 +689,6 @@ def generate_synthetic_ehr_cohort(num_patients: int = 200, seed: int = 42) -> pd
         if sbp >= 135:
             medications.append("Telmisartan 40mg OD")
 
-        tcf7l2 = np.random.choice(["CC", "CT", "TT"], p=[0.35, 0.45, 0.20])
-        pparg = np.random.choice(["CC", "CG", "GG"], p=[0.80, 0.17, 0.03])
-        kcnj11 = np.random.choice(["CC", "CT", "TT"], p=[0.36, 0.44, 0.20])
-        slc30a8 = np.random.choice(["CC", "CT", "TT"], p=[0.38, 0.42, 0.20])
-        fto = np.random.choice(["TT", "TA", "AA"], p=[0.35, 0.42, 0.23])
-        hla_dq = bool(np.random.rand() < 0.12)
-        prs = round(float(np.clip(0.30 + (hba1c - 6.5) * 0.08 + np.random.normal(0, 0.08), 0.10, 0.95)), 3)
-
         records.append({
             "patient_id": pid,
             "name": full_name,
@@ -845,13 +712,6 @@ def generate_synthetic_ehr_cohort(num_patients: int = 200, seed: int = 42) -> pd
             "stress_level": stress_level,
             "comorbidities": comorbidities,
             "medications": medications,
-            "tcf7l2_rs7903146": tcf7l2,
-            "pparg_rs1801282": pparg,
-            "kcnj11_rs5219": kcnj11,
-            "slc30a8_rs13266634": slc30a8,
-            "fto_rs9939609": fto,
-            "hla_dq_risk": hla_dq,
-            "genetic_risk_score": prs,
         })
 
     cohort_df = pd.DataFrame(records)

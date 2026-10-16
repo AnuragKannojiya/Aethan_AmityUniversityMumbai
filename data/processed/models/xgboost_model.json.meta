@@ -4,7 +4,7 @@
   "learning_rate": 0.07,
   "subsample": 0.8,
   "colsample_bytree": 0.8,
-  "scale_pos_weight": 0.41240444201197013,
+  "scale_pos_weight": 0.41416046007353635,
   "tree_method": "hist",
   "random_state": 42,
   "feature_names": [

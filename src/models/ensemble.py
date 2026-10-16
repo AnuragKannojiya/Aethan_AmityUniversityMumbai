@@ -1,13 +1,4 @@
-"""
-GlucoTwin: Multimodal Ensemble Engine (LSTM + XGBoost)
-======================================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Fuses deep temporal representations (GlucoseLSTM) with gradient-boosted
-decision trees (GlucoseXGBoost) into a calibrated ensemble for 2-hour forward
-glucose spike prediction (>180 mg/dL) with explainability and confidence scoring.
-"""
+"""GlucoTwin: Multimodal Ensemble Engine (LSTM + XGBoost)"""
 
 from __future__ import annotations
 
@@ -26,22 +17,7 @@ logger = logging.getLogger("glucotwin.models.ensemble")
 
 
 class GlucoTwinEnsemble:
-    """
-    Weighted Multimodal Ensemble combining:
-    1. GlucoseLSTM (default weight = 0.6):
-       Captures non-linear temporal dynamics, cross-step velocity, and attention
-       across the 2-hour (24-step) continuous monitoring sequence.
-    2. GlucoseXGBoost (default weight = 0.4):
-       Captures tabular non-linear interactions between rolling summary statistics
-       and clinical EHR risk factors (HbA1c, BMI, comorbidities, medications).
-
-    Provides:
-    - Weighted probabilistic prediction
-    - Prediction confidence calibration
-    - Inter-model concordance/agreement analysis
-    - Unified multimodal explainability (temporal attention + feature importance + clinical rules)
-    - Save/load persistence
-    """
+    """Weighted Multimodal Ensemble combining:"""
 
     def __init__(
         self,
@@ -74,9 +50,7 @@ class GlucoTwinEnsemble:
             self.lstm_model.to(self.device)
             self.lstm_model.eval()
 
-    # -------------------------------------------------------------------------
     # Inference Methods
-    # -------------------------------------------------------------------------
 
     def predict_proba(
         self,
@@ -84,23 +58,7 @@ class GlucoTwinEnsemble:
         x_static: Union[np.ndarray, torch.Tensor],
         x_flat: Optional[np.ndarray] = None,
     ) -> Union[float, np.ndarray]:
-        """
-        Compute weighted ensemble probability of a glucose spike within 2 hours.
-
-        Parameters
-        ----------
-        x_temporal : np.ndarray or torch.Tensor
-            Temporal sequence of shape (batch, 24, 54) or (24, 54).
-        x_static : np.ndarray or torch.Tensor
-            Static clinical features of shape (batch, 46) or (46,).
-        x_flat : np.ndarray, optional
-            Pre-flattened tabular features for XGBoost branch. If None, extracted on the fly.
-
-        Returns
-        -------
-        float or np.ndarray
-            Predicted spike probability in [0, 1].
-        """
+        """Compute weighted ensemble probability of a glucose spike within 2 hours."""
         is_single = (isinstance(x_temporal, np.ndarray) and x_temporal.ndim == 2) or (
             isinstance(x_temporal, torch.Tensor) and x_temporal.ndim == 2
         )
@@ -153,29 +111,13 @@ class GlucoTwinEnsemble:
         x_flat: Optional[np.ndarray] = None,
         threshold: float = 0.5,
     ) -> Union[int, np.ndarray]:
-        """
-        Binary spike forecast (0: No spike <=180 mg/dL, 1: Spike >180 mg/dL).
-
-        Parameters
-        ----------
-        x_temporal : np.ndarray or torch.Tensor
-        x_static : np.ndarray or torch.Tensor
-        x_flat : np.ndarray, optional
-        threshold : float, default=0.5
-
-        Returns
-        -------
-        int or np.ndarray
-            Binary prediction.
-        """
+        """Binary spike forecast (0: No spike <=180 mg/dL, 1: Spike >180 mg/dL)."""
         probs = self.predict_proba(x_temporal, x_static, x_flat=x_flat)
         if np.isscalar(probs):
             return int(probs >= threshold)
         return (probs >= threshold).astype(int)
 
-    # -------------------------------------------------------------------------
     # Confidence & Concordance Scoring
-    # -------------------------------------------------------------------------
 
     def predict_with_confidence(
         self,
@@ -184,26 +126,7 @@ class GlucoTwinEnsemble:
         x_flat: Optional[np.ndarray] = None,
         threshold: float = 0.5,
     ) -> Dict[str, Any]:
-        """
-        Performs joint prediction, model concordance verification, and uncertainty estimation.
-
-        Confidence formula:
-            Certainty = 2.0 * |P_ensemble - 0.5|  (0 at boundary, 1 at certainty)
-            Agreement = 1.0 - |P_lstm - P_xgb|    (1 if identical, 0 if opposite)
-            Confidence = 0.5 + 0.5 * (0.65 * Certainty + 0.35 * Agreement)
-
-        Returns
-        -------
-        Dict[str, Any]
-            Dict containing:
-            - spike_probability (float)
-            - prediction (int: 0 or 1)
-            - confidence (float in [0.5, 0.99])
-            - lstm_probability (float)
-            - xgb_probability (float)
-            - model_agreement (bool)
-            - attention_weights (List[float] of length 24)
-        """
+        """Performs joint prediction, model concordance verification, and uncertainty estimation."""
         xt_np = (
             x_temporal.detach().cpu().numpy()
             if isinstance(x_temporal, torch.Tensor)
@@ -262,9 +185,7 @@ class GlucoTwinEnsemble:
             "attention_weights": attn_weights,
         }
 
-    # -------------------------------------------------------------------------
     # Clinical & Multimodal Explainability
-    # -------------------------------------------------------------------------
 
     def explain_prediction(
         self,
@@ -273,17 +194,7 @@ class GlucoTwinEnsemble:
         x_flat: Optional[np.ndarray] = None,
         top_k: int = 5,
     ) -> Dict[str, Any]:
-        """
-        Generate clinically rich explanations combining:
-        1. Temporal Attention: which past timesteps drove the LSTM risk output
-        2. Feature Importance: top contributing features from XGBoost
-        3. Clinical Heuristics: physiological factors derived from current values
-
-        Returns
-        -------
-        Dict[str, Any]
-            Clinical explanation summary.
-        """
+        """Generate clinically rich explanations combining:"""
         res = self.predict_with_confidence(x_temporal, x_static, x_flat=x_flat)
         spike_prob = res["spike_probability"]
         attn = res["attention_weights"]
@@ -370,17 +281,10 @@ class GlucoTwinEnsemble:
             "recommendations": recommendations,
         }
 
-    # -------------------------------------------------------------------------
     # Persistence
-    # -------------------------------------------------------------------------
 
     def save(self, save_dir: Union[str, Path]) -> None:
-        """
-        Save ensemble artifacts to destination directory:
-        - lstm_model.pt
-        - xgboost_model.json
-        - ensemble_config.json
-        """
+        """Save ensemble artifacts to destination directory:"""
         dir_path = Path(save_dir)
         dir_path.mkdir(parents=True, exist_ok=True)
 

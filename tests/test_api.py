@@ -1,12 +1,4 @@
-"""
-Unit Tests for GlucoTwin API Endpoints and Service Integration
-=============================================================
-Validates all REST API routes, schemas, data serialization, and
-Digital Twin forecasting/simulation pipelines.
-
-Author: Team Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-"""
+"""Unit Tests for GlucoTwin API Endpoints and Service Integration"""
 
 import sys
 import unittest

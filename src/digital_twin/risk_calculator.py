@@ -1,14 +1,4 @@
-"""
-GlucoTwin: Clinical Glycemic Risk Calculator
-===========================================
-Team: Aethan, Amity University Mumbai
-Challenge: Digital Twin Challenge 2026
-
-Calculates composite clinical risk scores by integrating real-time continuous
-glucose telemetry, static Electronic Health Records (EHR), and ML spike prediction
-probabilities following ADA / RSSDI (Research Society for the Study of Diabetes in India)
-guidelines and International Consensus on Time in Range.
-"""
+"""GlucoTwin: Clinical Glycemic Risk Calculator"""
 
 from __future__ import annotations
 
@@ -21,28 +11,7 @@ logger = logging.getLogger("glucotwin.digital_twin.risk_calculator")
 
 
 class RiskCalculator:
-    """
-    Multifactorial Clinical Glycemic Risk Engine.
-
-    Integrates:
-    1. Acute Glycemic Status:
-       - Glucose > 250 mg/dL: Critical (Severe Hyperglycemia / Hyperosmolar risk)
-       - Glucose < 70 mg/dL:  Critical / Alert (Acute Hypoglycemia)
-       - Glucose 180-250:     High (Above postprandial target)
-       - Glucose 140-180:     Moderate (Elevated / pre-spike territory)
-       - Glucose 70-140:      Low (Euglycemic target range)
-    2. Dynamic Kinetic Momentum:
-       - Velocity (ROC in mg/dL/min)
-       - Glycemic acceleration and trend direction
-       - Short-term volatility and Coefficient of Variation (CV %)
-    3. Static Clinical Biomarkers:
-       - HbA1c levels (<7.0%, 7.0-8.5%, >8.5%)
-       - South Asian BMI cutoffs (Overweight >= 23, Obese >= 25 kg/m2)
-       - Comorbidity burden (hypertension, CAD, nephropathy)
-       - Insulin vs oral anti-diabetic regimens
-    4. ML Ensemble Forecast:
-       - 2-hour forward spike probability from GlucoseLSTM + XGBoost
-    """
+    """Multifactorial Clinical Glycemic Risk Engine."""
 
     # Clinical Glycemic Thresholds (mg/dL)
     THRESHOLD_HYPO_SEVERE = 54.0
@@ -53,19 +22,7 @@ class RiskCalculator:
 
     @classmethod
     def classify_glucose_level(cls, glucose: float) -> str:
-        """
-        Stratify instantaneous glucose value into clinical tiers.
-
-        Parameters
-        ----------
-        glucose : float
-            Current interstitial glucose reading in mg/dL.
-
-        Returns
-        -------
-        str
-            Risk category: 'Critical', 'High', 'Moderate', 'Low'.
-        """
+        """Stratify instantaneous glucose value into clinical tiers."""
         if glucose >= cls.THRESHOLD_CRITICAL_HYPER or glucose < cls.THRESHOLD_HYPO_LEVEL1:
             return "Critical"
         elif glucose >= cls.THRESHOLD_SPIKE:
@@ -82,28 +39,7 @@ class RiskCalculator:
         cgm_features: Dict[str, Any],
         model_prediction: Optional[float] = None,
     ) -> Dict[str, Any]:
-        """
-        Computes a composite multi-factor risk score (0-100) and stratified category.
-
-        Parameters
-        ----------
-        ehr_features : Dict[str, Any]
-            Static patient characteristics (age, hba1c, bmi, medication, comorbidities).
-        cgm_features : Dict[str, Any]
-            Dynamic telemetry metrics (glucose, rate_of_change, activity, heart_rate).
-        model_prediction : float, optional
-            Spike probability from ML model [0, 1].
-
-        Returns
-        -------
-        Dict[str, Any]
-            Dictionary containing:
-            - composite_score (float, 0-100)
-            - risk_level ('Low', 'Moderate', 'High', 'Critical')
-            - spike_probability (float)
-            - risk_factors (List[str])
-            - time_to_potential_spike (Optional[int])
-        """
+        """Computes a composite multi-factor risk score (0-100) and stratified category."""
         current_bg = float(cgm_features.get("glucose", cgm_features.get("last_glucose", 140.0)))
         roc = float(cgm_features.get("rate_of_change", cgm_features.get("glucose_rate_of_change", 0.0)))
         activity = str(cgm_features.get("activity_type", "Sedentary"))
@@ -245,23 +181,7 @@ class RiskCalculator:
         risk_factors: List[str],
         patient_profile: Optional[Dict[str, Any]] = None,
     ) -> List[str]:
-        """
-        Generates actionable, clinically sound lifestyle and therapeutic recommendations.
-
-        Parameters
-        ----------
-        risk_level : str
-            Current risk category ('Low', 'Moderate', 'High', 'Critical').
-        risk_factors : List[str]
-            Identified clinical/behavioral risk factors.
-        patient_profile : Dict[str, Any], optional
-            Patient clinical context (medications, dietary pattern).
-
-        Returns
-        -------
-        List[str]
-            Actionable countermeasure recommendations.
-        """
+        """Generates actionable, clinically sound lifestyle and therapeutic recommendations."""
         profile = patient_profile or {}
         medication = str(profile.get("medication", "Metformin"))
         recs: List[str] = []
@@ -303,14 +223,7 @@ class RiskCalculator:
 
     @staticmethod
     def calculate_glycemic_statistics(readings: List[Dict[str, Any]]) -> Dict[str, float]:
-        """
-        Calculates consensus continuous glucose monitoring statistics.
-
-        Returns
-        -------
-        Dict[str, float]
-            TIR %, TAR %, TBR %, Mean, Std, CV %, GMI.
-        """
+        """Calculates consensus continuous glucose monitoring statistics."""
         if not readings:
             return {
                 "time_in_range_pct": 70.0,
