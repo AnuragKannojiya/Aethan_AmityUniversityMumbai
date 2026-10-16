@@ -128,6 +128,7 @@ python -m unittest discover -s tests -v
 ## 🎥 20-Minute Prototype Demonstration Video & Presentation
 
 - **20-Minute Demo Video (Unlisted YouTube / Recording Link):** ▶️ _[Insert Unlisted YouTube Link Here Before Final Submission]_
+- **Official Presentation & Video Demonstration Guide (PDF):** [`architecture/GlucoTwin_Presentation_and_Video_Script.pdf`](architecture/GlucoTwin_Presentation_and_Video_Script.pdf)
 - **Word-for-Word 22-Minute Presentation & Demo Script:** [`architecture/presentation_script.md`](architecture/presentation_script.md)
 - **Editable PowerPoint Deck (`.pptx` with Speaker Notes):** [`architecture/presentation.pptx`](architecture/presentation.pptx)
 - **Presentation Slides (`.pdf`):** [`architecture/presentation.pdf`](architecture/presentation.pdf)
