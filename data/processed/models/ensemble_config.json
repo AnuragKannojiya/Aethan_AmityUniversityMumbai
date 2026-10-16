@@ -1,0 +1,6 @@
+{
+  "lstm_weight": 0.6,
+  "xgb_weight": 0.4,
+  "has_lstm": true,
+  "has_xgb": true
+}

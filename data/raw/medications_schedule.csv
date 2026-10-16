@@ -1,0 +1,329 @@
+patient_id,medication,dosage,frequency,timing_hours,adherence_rate
+P001,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P001,Empagliflozin,25 mg,Once daily morning with water,08:00,0.91
+P002,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P002,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.95
+P003,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.82
+P003,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.8
+P004,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.96
+P004,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.84
+P005,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P006,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.96
+P006,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.84
+P007,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.89
+P007,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.79
+P008,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P008,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.83
+P009,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.94
+P010,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.85
+P010,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.95
+P011,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.92
+P011,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.83
+P012,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.87
+P012,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.81
+P013,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.88
+P013,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.88
+P014,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.89
+P014,Empagliflozin,25 mg,Once daily morning with water,08:00,0.86
+P015,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.86
+P015,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.98
+P016,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.89
+P016,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.9
+P017,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.92
+P018,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.98
+P019,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.88
+P019,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.87
+P020,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.87
+P020,Empagliflozin,25 mg,Once daily morning with water,08:00,0.86
+P021,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.9
+P021,Empagliflozin,25 mg,Once daily morning with water,08:00,0.87
+P022,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P023,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P023,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.85
+P024,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.92
+P024,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.78
+P025,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.96
+P025,Empagliflozin,10 mg,Once daily morning with water,08:00,0.9
+P026,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.82
+P026,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.83
+P027,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P028,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P029,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.92
+P029,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.78
+P030,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.84
+P030,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.87
+P031,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.97
+P031,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.89
+P032,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.86
+P032,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.92
+P033,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.85
+P034,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P034,Empagliflozin,10 mg,Once daily morning with water,08:00,0.87
+P035,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.85
+P035,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.88
+P036,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P036,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.8
+P037,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P038,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P038,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.83
+P039,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P039,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.84
+P040,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.93
+P040,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.82
+P041,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P041,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.89
+P042,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.88
+P042,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.93
+P043,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.92
+P043,Empagliflozin,25 mg,Once daily morning with water,08:00,0.85
+P044,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P044,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.9
+P045,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.87
+P045,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.85
+P046,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.97
+P046,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.8
+P047,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.92
+P047,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.91
+P048,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P049,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.95
+P049,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.94
+P050,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.85
+P051,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P051,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.78
+P052,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.89
+P053,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P053,Empagliflozin,10 mg,Once daily morning with water,08:00,0.93
+P054,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.84
+P054,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.84
+P055,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.98
+P055,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.86
+P056,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.88
+P056,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.93
+P057,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P058,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P058,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.94
+P059,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.96
+P060,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.98
+P061,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P061,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.9
+P062,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.84
+P062,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.84
+P063,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.84
+P064,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P064,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.85
+P065,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.89
+P065,Empagliflozin,10 mg,Once daily morning with water,08:00,0.89
+P066,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P067,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.91
+P067,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.88
+P068,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P068,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.9
+P069,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.82
+P070,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P070,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.83
+P071,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P071,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.85
+P072,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P073,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.86
+P073,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.87
+P074,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.93
+P075,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.9
+P076,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P077,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.95
+P077,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.82
+P078,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.88
+P078,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.92
+P079,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.89
+P079,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.79
+P080,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.82
+P080,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.88
+P081,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.89
+P081,Empagliflozin,10 mg,Once daily morning with water,08:00,0.92
+P082,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.85
+P082,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.83
+P083,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.83
+P083,Empagliflozin,25 mg,Once daily morning with water,08:00,0.91
+P084,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.84
+P084,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.81
+P085,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.93
+P086,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.83
+P087,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.98
+P087,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.92
+P088,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.89
+P089,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.94
+P090,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.83
+P090,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.89
+P091,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.87
+P091,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.85
+P092,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P092,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.91
+P093,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.86
+P094,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P094,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.79
+P095,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.91
+P096,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P096,Empagliflozin,25 mg,Once daily morning with water,08:00,0.91
+P097,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.88
+P097,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.86
+P098,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.93
+P099,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P100,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.93
+P101,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.87
+P101,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.91
+P102,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.93
+P102,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.82
+P103,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.85
+P104,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P104,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.83
+P105,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.97
+P105,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.86
+P106,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.89
+P106,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.97
+P107,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.85
+P107,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.96
+P108,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.83
+P109,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.91
+P110,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.93
+P111,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.93
+P111,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.92
+P112,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P113,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.96
+P113,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.93
+P114,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.94
+P115,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P115,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.83
+P116,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.88
+P116,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.84
+P117,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P117,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.89
+P118,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.88
+P118,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.91
+P119,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.87
+P120,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.88
+P120,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.9
+P121,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P121,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.96
+P122,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.82
+P122,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.93
+P123,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.92
+P124,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P124,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.8
+P125,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.96
+P126,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P126,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.86
+P127,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P128,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.86
+P129,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.85
+P130,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.83
+P130,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.9
+P131,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.88
+P131,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.93
+P132,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.93
+P132,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.75
+P133,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.94
+P133,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.82
+P134,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.86
+P135,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P135,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.93
+P136,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.87
+P137,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.97
+P137,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.88
+P138,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P138,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.83
+P139,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.87
+P139,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.82
+P140,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P141,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P141,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.91
+P142,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.98
+P142,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.87
+P143,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.85
+P143,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.87
+P144,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P144,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.95
+P145,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.9
+P146,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P146,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.88
+P147,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.98
+P148,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.86
+P148,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.92
+P149,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.93
+P149,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.83
+P150,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.92
+P151,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P151,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.86
+P152,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.91
+P153,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.84
+P154,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.92
+P155,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P156,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.89
+P156,Empagliflozin,25 mg,Once daily morning with water,08:00,0.92
+P157,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.86
+P158,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P158,Empagliflozin,10 mg,Once daily morning with water,08:00,0.9
+P159,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P159,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.83
+P160,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.79
+P161,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.93
+P162,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.86
+P163,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.94
+P164,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.98
+P165,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.94
+P166,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.89
+P166,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.92
+P167,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.93
+P168,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P168,Empagliflozin,10 mg,Once daily morning with water,08:00,0.87
+P169,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.9
+P169,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.8
+P170,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.95
+P170,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.91
+P171,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.96
+P171,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.83
+P172,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P172,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.86
+P173,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P174,Insulin,16 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.81
+P175,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P176,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.85
+P177,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P178,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.83
+P178,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.92
+P179,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.9
+P180,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.76
+P181,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.84
+P182,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.91
+P182,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.93
+P182,Insulin,32 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.84
+P183,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.95
+P184,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.91
+P185,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.86
+P185,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.84
+P186,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.88
+P186,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.9
+P187,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P187,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.95
+P188,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.93
+P189,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.9
+P189,Empagliflozin,10 mg,Once daily morning with water,08:00,0.87
+P190,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.82
+P190,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.89
+P191,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.95
+P191,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.76
+P192,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.97
+P192,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.98
+P193,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.92
+P194,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.87
+P194,Glimepiride,3 mg,Once daily 30 min before breakfast,07:30,0.92
+P194,Insulin,24 units,Twice daily subcutaneous before meals,"07:45, 20:00",0.79
+P195,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.87
+P195,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.93
+P196,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.83
+P196,Glimepiride,2 mg,Once daily 30 min before breakfast,07:30,0.91
+P197,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.93
+P197,Sitagliptin,100 mg,Once daily with breakfast,08:15,0.92
+P198,Metformin,1000 mg,Twice daily with meals,"08:00, 20:30",0.91
+P198,Sitagliptin,50 mg,Once daily with breakfast,08:15,0.95
+P199,Metformin,500 mg,Twice daily with meals,"08:00, 20:30",0.84
+P199,Glimepiride,1 mg,Once daily 30 min before breakfast,07:30,0.89
+P200,Metformin,850 mg,Twice daily with meals,"08:00, 20:30",0.83

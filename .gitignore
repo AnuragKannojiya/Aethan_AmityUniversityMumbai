@@ -1,0 +1,48 @@
+# Dependencies & build artifacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.so
+
+# Large generated time-series & tensor archives (>20MB - regenerated via python data/generate_synthetic.py)
+data/raw/cgm_readings.csv
+data/processed/cgm_processed.csv
+data/processed/*.npz
+
+# Keep all EHR datasets, scalers, metadata, and trained model checkpoints in Git!
+!data/raw/ehr_patients.csv
+!data/raw/medications_schedule.csv
+!data/raw/glucose_events.csv
+!data/processed/ehr_processed.csv
+!data/processed/ehr_features.npy
+!data/processed/*.joblib
+!data/processed/*.json
+!data/processed/models/*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Next.js
+dashboard/node_modules/
+dashboard/.next/
+dashboard/out/
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Environment
+.env
+.env.local
