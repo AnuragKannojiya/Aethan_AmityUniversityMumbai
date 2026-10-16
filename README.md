@@ -12,6 +12,7 @@
 | **College / Institution** | Amity University Mumbai |
 | **Team Leader** | Anurag Roopchandra Kannojiya (`anuragkannaujiyak@gmail.com`) |
 | **Public GitHub Repository** | [https://github.com/AnuragKannojiya/Aethan_AmityUniversityMumbai](https://github.com/AnuragKannojiya/Aethan_AmityUniversityMumbai) |
+| **Demo Video (Unlisted YouTube)** | [https://youtu.be/SJgEKG_YWd8](https://youtu.be/SJgEKG_YWd8) |
 | **Submission Folder** | `Aethan_AmityUniversityMumbai` |
 
 ---
@@ -127,8 +128,7 @@ python -m unittest discover -s tests -v
 
 ## 🎥 20-Minute Prototype Demonstration Video & Presentation
 
-- **20-Minute Demo Video (Unlisted YouTube / Recording Link):** ▶️ _[Insert Unlisted YouTube Link Here Before Final Submission]_
-- **Official Presentation & Video Demonstration Guide (PDF):** [`architecture/GlucoTwin_Presentation_and_Video_Script.pdf`](architecture/GlucoTwin_Presentation_and_Video_Script.pdf)
+- **20-Minute Demo Video (Unlisted YouTube):** ▶️ [**Watch the 20-Minute Prototype & Presentation Walkthrough on YouTube**](https://youtu.be/SJgEKG_YWd8) (`https://youtu.be/SJgEKG_YWd8`)
 - **Word-for-Word 22-Minute Presentation & Demo Script:** [`architecture/presentation_script.md`](architecture/presentation_script.md)
 - **Editable PowerPoint Deck (`.pptx` with Speaker Notes):** [`architecture/presentation.pptx`](architecture/presentation.pptx)
 - **Presentation Slides (`.pdf`):** [`architecture/presentation.pdf`](architecture/presentation.pdf)
